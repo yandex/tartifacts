@@ -1,11 +1,21 @@
 {
   "name": "tartifacts",
   "version": "0.0.0",
-  "description": "",
+  "description": "The tool to create artifacts for your assemblies.",
   "license": "MIT",
   "repository": "blond/tartifacts",
   "author": "Andrew Abramov <mail@blond.im> (github.com/blond)",
-  "keywords": [],
+  "keywords": [
+    "artifacts",
+    "assemblies",
+    "tarball",
+    "tar",
+    "gzip",
+    "tar.gz",
+    "destination",
+    "copy",
+    "files"
+  ],
   "main": "lib/index.js",
   "files": [
     "lib/**",
