@@ -16,8 +16,12 @@
     "copy",
     "files"
   ],
+  "bin": {
+    "tartifacts": "bin/tartifacts"
+  },
   "main": "lib/index.js",
   "files": [
+    "bin/**",
     "lib/**",
     "index.js"
   ],
@@ -28,6 +32,7 @@
     "archiver": "1.0.0",
     "copy": "0.2.0",
     "glob-stream": "5.3.2",
+    "meow": "3.7.0",
     "mkdirp": "0.5.1"
   },
   "devDependencies": {
