@@ -1,0 +1,40 @@
+{
+  "name": "tartifacts",
+  "version": "0.0.0",
+  "description": "",
+  "license": "MIT",
+  "repository": "blond/tartifacts",
+  "author": "Andrew Abramov <mail@blond.im> (github.com/blond)",
+  "keywords": [],
+  "main": "lib/index.js",
+  "files": [
+    "lib/**",
+    "index.js"
+  ],
+  "engines": {
+    "node": ">= 4.0"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "ava": "^0.14.0",
+    "coveralls": "^2.11.9",
+    "eslint": "^2.9.0",
+    "eslint-config-pedant": "^0.4.0"
+  },
+  "scripts": {
+    "pretest": "eslint .",
+    "test": "nyc ava",
+    "unit-test": "ava",
+    "coveralls": "nyc report --reporter=text-lcov | coveralls"
+  },
+  "ava": {
+    "serial": true,
+    "verbose": true,
+    "files": [
+      "test/**/*.test.js"
+    ],
+    "sources": [
+      "lib/**/*.js"
+    ]
+  }
+}
