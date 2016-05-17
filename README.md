@@ -1,6 +1,28 @@
 tartifacts
 ==========
 
+[![NPM Status][npm-img]][npm]
+[![Travis Status][test-img]][travis]
+[![Windows Status][appveyor-img]][appveyor]
+[![Coverage Status][coverage-img]][coveralls]
+[![Dependency Status][david-img]][david]
+
+[npm]:          https://www.npmjs.org/package/tartifacts
+[npm-img]:      https://img.shields.io/npm/v/tartifacts.svg
+
+[travis]:       https://travis-ci.org/blond/tartifacts
+[test-img]:     https://img.shields.io/travis/blond/tartifacts.svg?label=tests
+
+[appveyor]:     https://ci.appveyor.com/project/blond/tartifacts
+[appveyor-img]: http://img.shields.io/appveyor/ci/blond/tartifacts.svg?style=flat&label=windows
+
+[coveralls]:    https://coveralls.io/r/blond/tartifacts
+[coverage-img]: https://img.shields.io/coveralls/blond/tartifacts.svg
+
+[david]:        https://david-dm.org/blond/tartifacts
+[david-img]:    http://img.shields.io/david/blond/tartifacts.svg?style=flat
+
+
 The tool to create artifacts for your assemblies.
 
 Copy only the necessary files and pack them in `tar.gz` file.
