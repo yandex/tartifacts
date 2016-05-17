@@ -101,6 +101,23 @@ test('should take into account symlink', t => {
         });
 });
 
+test('should ignore broken symlinks', t => {
+    mockFs({
+        'source-dir': {
+            'file-1.txt': 'Hi!',
+            'symlink.txt': mockFs.symlink({
+                path: '../no-file'
+            })
+        }
+    });
+
+    return packFiles(['file-1.txt', 'symlink.txt'])
+        .then(() => extractFiles())
+        .then(files => {
+            t.deepEqual(files, ['file-1.txt']);
+        });
+});
+
 test('should ignore empty file', t => {
     mockFs({
         'source-dir': {

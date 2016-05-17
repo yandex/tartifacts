@@ -117,6 +117,24 @@ test('should copy source file of symlink', t => {
         });
 });
 
+test('should ignore broken symlinks', t => {
+    mockFs({
+        'source-dir': {
+            'file-1.txt': 'Hi!',
+            'symlink.txt': mockFs.symlink({
+                path: 'no-file'
+            })
+        }
+    });
+
+    return copyFiles(['file-1.txt', 'symlink.txt'])
+        .then(() => {
+            const files = fs.readdirSync(path.join(dest, 'source-dir'));
+
+            t.deepEqual(files, ['file-1.txt']);
+        });
+});
+
 test('should ignore empty file', t => {
     mockFs({
         'source-dir': {
