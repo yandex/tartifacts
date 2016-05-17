@@ -1,0 +1,51 @@
+#!/usr/bin/env node
+
+'use strict';
+
+const path = require('path');
+
+const meow = require('meow');
+const tartifacts = require('../');
+
+const loadPatterns = require('../lib/load-patterns');
+
+const cli = meow(`
+    Usage
+      $ tartifacts
+
+    Options
+      -i, --include   Paths to inlcude files
+      -e, --exclude   Paths to exclude files
+      -p, --patterns  Path to file with include and exclude patterns
+      -d, --dest      Path to destination file
+
+    Examples
+      $ tartifacts --include="lib/**" --exclude="node_modules/" --dest="artifact.tar.gz"
+      $ tartifacts --patterns="./path/to/patterns" --dest="artifact.tar.gz"
+`, {
+	alias: {
+        h: 'help',
+        v: 'version',
+        i: 'include',
+        e: 'exclude',
+        p: 'patterns',
+        d: 'dest'
+	}
+});
+
+const flags = cli.flags;
+const basename = path.basename(flags.dest);
+const artifact = {
+	dest: flags.dest,
+    patterns: flags.patterns && loadPatterns(flags.patterns),
+	includes: [].concat(flags.include || []),
+	excludes: [].concat(flags.exclude || []),
+	tar: basename.includes('.tar'),
+	gzip: basename.includes('.gz')
+};
+
+if (Object.keys(flags).length === 0) {
+    cli.showHelp();
+}
+
+tartifacts(artifact);
