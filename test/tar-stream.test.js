@@ -6,7 +6,7 @@ const path = require('path');
 const test = require('ava');
 const mockFs = require('mock-fs');
 const streamify = require('stream-array');
-const tar = require('tar-fs');
+const tar = require('tar');
 
 const TarStream = require('../lib/tar-stream');
 
@@ -40,7 +40,7 @@ test('should take into account contents of file', t => {
     });
 
     return packFiles(['file-1.txt'])
-        .then(() => extractFiles())
+        .then(() => extractFiles(resdir))
         .then(() => {
             const str = fs.readFileSync(path.join(resdir, 'file-1.txt'), 'utf-8');
 
@@ -59,9 +59,9 @@ test('should create tarball with subdirs', t => {
     });
 
     return packFiles(['sub-dir/file-1.txt', 'sub-dir/file-2.txt'])
-        .then(() => extractFiles('sub-dir'))
+        .then(() => extractFiles())
         .then(files => {
-            t.deepEqual(files, ['file-1.txt', 'file-2.txt']);
+            t.deepEqual(files, ['sub-dir/file-1.txt', 'sub-dir/file-2.txt']);
         });
 });
 
@@ -91,7 +91,7 @@ test('should take into account symlink', t => {
     });
 
     return packFiles(['symlink.txt'])
-        .then(() => extractFiles())
+        .then(() => extractFiles(resdir))
         .then(() => {
             fs.unlinkSync('./file-1.txt');
 
@@ -149,21 +149,18 @@ function packFiles(filenames, options) {
     });
 }
 
-function extractFiles(dirname) {
-    return new Promise((resolve, reject) => {
-        fs.createReadStream(dest)
-            .on('error', reject)
-            .pipe(tar.extract(resdir))
-            .on('error', reject)
-            .on('finish', () => {
-                try {
-                    const files = fs.readdirSync(dirname ? path.resolve(resdir, dirname): resdir);
+function extractFiles(dir) {
+    const files = [];
 
-                    resolve(files);
-                } catch(err) {
-                    resolve([]);
-                }
-            });
+    return new Promise((resolve, reject) => {
+        const rs = fs.createReadStream(dest).on('error', reject);
+        const ws = dir
+            ? tar.Extract({ path: dir })
+            : tar.Parse().on("entry", entry => files.push(entry.props.path));
+
+        rs.pipe(ws)
+            .on('error', reject)
+            .on('end', () => resolve(files));
     });
 }
 
