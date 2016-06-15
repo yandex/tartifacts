@@ -18,6 +18,7 @@ const cli = meow(`
       -e, --exclude   Paths to exclude files
       -p, --patterns  Path to file with include and exclude patterns
       -d, --dest      Path to destination file
+      -r, --root      Path to root root directory
 
     Examples
       $ tartifacts --include="lib/**" --exclude="node_modules/" --dest="artifact.tar.gz"
@@ -29,7 +30,8 @@ const cli = meow(`
         i: 'include',
         e: 'exclude',
         p: 'patterns',
-        d: 'dest'
+        d: 'dest',
+        r: 'root'
 	}
 });
 
@@ -44,8 +46,12 @@ const artifact = {
 	gzip: basename.includes('.gz')
 };
 
+const options = {
+    root: flags.root
+};
+
 if (Object.keys(flags).length === 0) {
     cli.showHelp();
 }
 
-tartifacts(artifact);
+tartifacts(artifact, options);
