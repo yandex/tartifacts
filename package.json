@@ -1,6 +1,6 @@
 {
   "name": "tartifacts",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "The tool to create artifacts for your assemblies.",
   "license": "MIT",
   "repository": "blond/tartifacts",
