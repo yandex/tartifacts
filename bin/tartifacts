@@ -18,7 +18,7 @@ const cli = meow(`
       -e, --exclude   Paths to exclude files
       -p, --patterns  Path to file with include and exclude patterns
       -d, --dest      Path to destination file
-      -r, --root      Path to root root directory
+      -r, --root      Path to root directory
 
     Examples
       $ tartifacts --include="lib/**" --exclude="node_modules/" --dest="artifact.tar.gz"
