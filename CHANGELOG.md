@@ -1,6 +1,22 @@
 Changelog
 =========
 
+v1.1.0 (2016-06-16)
+-------------------
+
+### CLI
+
+* Added root dir argument to CLI (@rndD) ([#11]).
+
+[#11]: https://github.com/blond/tartifacts/pull/11
+
+### Commits
+
+* [[`bbe949c`](https://github.com/blond/tartifacts/commit/bbe949c)] - docs(cli): update cli usage (@blond)
+* [[`6be1484`](https://github.com/blond/tartifacts/commit/6be1484)] - Root dir argument in CLI (@rndD)
+* [[`ee78548`](https://github.com/blond/tartifacts/commit/ee78548)] - Added .idea files to gitignore (@alex-k)
+* [[`cb53d91`](https://github.com/blond/tartifacts/commit/cb53d91)] - chore(package): update ava to version 0.15.0 (@greenkeeperio-bot)
+
 v1.0.1 (2016-05-18)
 -------------------
 
