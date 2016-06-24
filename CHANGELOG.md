@@ -1,6 +1,13 @@
 Changelog
 =========
 
+v1.1.1 (2016-06-24)
+-------------------
+
+### Commits
+
+* [[`7eff597`](https://github.com/blond/tartifacts/commit/7eff597)] - chore(package): update copy to version 0.2.3 (@greenkeeperio-bot)
+
 v1.1.0 (2016-06-16)
 -------------------
 
