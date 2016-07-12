@@ -37,7 +37,7 @@
   },
   "devDependencies": {
     "ava": "^0.15.0",
-    "coveralls": "^2.11.9",
+    "coveralls": "^2.11.10",
     "eslint": "^3.0.0",
     "eslint-config-pedant": "^0.7.0",
     "is-gzip": "^1.0.0",
