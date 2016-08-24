@@ -19,7 +19,7 @@
   "bin": {
     "tartifacts": "bin/tartifacts"
   },
-  "main": "lib/index.js",
+  "main": "index.js",
   "files": [
     "bin/**",
     "lib/**",
