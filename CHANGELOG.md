@@ -1,6 +1,23 @@
 Changelog
 =========
 
+v1.1.2 (2016-08-24)
+-------------------
+
+### Bug Fixes
+
+* fix path to main file (@blond [#35]).
+
+[#35]: https://github.com/blond/tartifacts/pull/35
+
+### Dependencies
+
+* update `archiver` to version `1.0.1` ([#28] @greenkeeperio-bot).
+* update `copy` to version `0.3.0` ([#26] @greenkeeperio-bot).
+
+[#28]: https://github.com/blond/tartifacts/pull/28
+[#26]: https://github.com/blond/tartifacts/pull/26
+
 v1.1.1 (2016-06-24)
 -------------------
 
