@@ -29,7 +29,7 @@
     "node": ">= 4.0"
   },
   "dependencies": {
-    "archiver": "1.0.1",
+    "archiver": "1.1.0",
     "copy": "0.3.0",
     "glob-stream": "5.3.4",
     "meow": "3.7.0",
