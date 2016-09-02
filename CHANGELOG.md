@@ -1,19 +1,36 @@
 Changelog
 =========
 
+v1.1.3 (2016-09-02)
+-------------------
+
+### Performance
+
+* Improved performance of file search by patterns (glob): there is no need to sort files (@blond [#41]).
+
+[#41]: https://github.com/blond/tartifacts/pull/41
+
+### Dependencies
+
+* Updated `glob-stream` to version `5.3.4` (@greenkeeperio-bot [#38]).
+* Updated `archiver` to version `1.1.0` (@greenkeeperio-bot [#39]).
+
+[#38]: https://github.com/blond/tartifacts/pull/38
+[#39]: https://github.com/blond/tartifacts/pull/39
+
 v1.1.2 (2016-08-24)
 -------------------
 
 ### Bug Fixes
 
-* fix path to main file (@blond [#35]).
+* Fixed path to main file (@blond [#35]).
 
 [#35]: https://github.com/blond/tartifacts/pull/35
 
 ### Dependencies
 
-* update `archiver` to version `1.0.1` ([#28] @greenkeeperio-bot).
-* update `copy` to version `0.3.0` ([#26] @greenkeeperio-bot).
+* Updated `archiver` to version `1.0.1` (@greenkeeperio-bot [#28]).
+* Updated `copy` to version `0.3.0` (@greenkeeperio-bot [#26]).
 
 [#28]: https://github.com/blond/tartifacts/pull/28
 [#26]: https://github.com/blond/tartifacts/pull/26
@@ -30,7 +47,7 @@ v1.1.0 (2016-06-16)
 
 ### CLI
 
-* Added root dir argument to CLI (@rndD) ([#11]).
+* Added root dir argument to CLI (@rndD [#11]).
 
 [#11]: https://github.com/blond/tartifacts/pull/11
 
@@ -46,7 +63,7 @@ v1.0.1 (2016-05-18)
 
 ### Bug Fixes
 
-* should ignore broken symlinks ([#7]).
+* Should ignore broken symlinks ([#7]).
 
 [#7]: https://github.com/blond/tartifacts/pull/7
 
