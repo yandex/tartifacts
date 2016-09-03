@@ -39,6 +39,7 @@
   },
   "devDependencies": {
     "ava": "^0.16.0",
+    "babel-eslint": "^6.1.2",
     "coveralls": "^2.11.9",
     "eslint": "^3.0.0",
     "eslint-config-pedant": "^0.8.0",

@@ -14,7 +14,7 @@ const writeArtifact = promisify(require('../../lib/write-artifact'));
 
 test.afterEach(() => mockFs.restore());
 
-test('should copy artifact by default', t => {
+test('should copy artifact by default', async t => {
     mockFs({
         'source-dir': {
             'file-1.txt': 'Hi!',
@@ -22,15 +22,14 @@ test('should copy artifact by default', t => {
         }
     });
 
-    return writeArtifact({ dest: 'dest-dir', includes: ['source-dir/**'] })
-        .then(() => {
-            const stats = fs.statSync('dest-dir');
+    await writeArtifact({ dest: 'dest-dir', includes: ['source-dir/**'] });
 
-            t.true(stats.isDirectory());
-        });
+    const stats = fs.statSync('dest-dir');
+
+    t.true(stats.isDirectory());
 });
 
-test('should support include param as string', t => {
+test('should support include param as string', async t => {
     mockFs({
         'source-dir': {
             'file-1.txt': 'Hi!',
@@ -38,18 +37,16 @@ test('should support include param as string', t => {
         }
     });
 
-    return Promise.all([
-        writeArtifact({ dest: 'dest-1', includes: ['source-dir/**'] }),
-        writeArtifact({ dest: 'dest-2', includes: 'source-dir/**' })
-    ]).then(() => {
-        const files1 = fs.readdirSync('dest-1/source-dir');
-        const files2 = fs.readdirSync('dest-2/source-dir');
+    await writeArtifact({ dest: 'dest-1', includes: ['source-dir/**'] });
+    await writeArtifact({ dest: 'dest-2', includes: 'source-dir/**' });
 
-        t.deepEqual(files1, files2);
-    });
+    const files1 = fs.readdirSync('dest-1/source-dir');
+    const files2 = fs.readdirSync('dest-2/source-dir');
+
+    t.deepEqual(files1, files2);
 });
 
-test('should support exclude param as string', t => {
+test('should support exclude param as string', async t => {
     mockFs({
         'source-dir': {
             'file-1.txt': 'Hi!',
@@ -57,18 +54,16 @@ test('should support exclude param as string', t => {
         }
     });
 
-    return Promise.all([
-        writeArtifact({ dest: 'dest-1', includes: ['source-dir/**'], exclude: ['source-dir/file-2.txt'] }),
-        writeArtifact({ dest: 'dest-2', includes: ['source-dir/**'], exclude: 'source-dir/file-2.txt' })
-    ]).then(() => {
-        const files1 = fs.readdirSync('dest-1/source-dir');
-        const files2 = fs.readdirSync('dest-2/source-dir');
+    await writeArtifact({ dest: 'dest-1', includes: ['source-dir/**'], exclude: ['source-dir/file-2.txt'] });
+    await writeArtifact({ dest: 'dest-2', includes: ['source-dir/**'], exclude: 'source-dir/file-2.txt' });
 
-        t.deepEqual(files1, files2);
-    });
+    const files1 = fs.readdirSync('dest-1/source-dir');
+    const files2 = fs.readdirSync('dest-2/source-dir');
+
+    t.deepEqual(files1, files2);
 });
 
-test('should support patterns param as string', t => {
+test('should support patterns param as string', async t => {
     mockFs({
         'source-dir': {
             'file-1.txt': 'Hi!',
@@ -76,18 +71,16 @@ test('should support patterns param as string', t => {
         }
     });
 
-    return Promise.all([
-        writeArtifact({ dest: 'dest-1', patterns: ['source-dir/**'] }),
-        writeArtifact({ dest: 'dest-2', patterns: 'source-dir/**' })
-    ]).then(() => {
-        const files1 = fs.readdirSync('dest-1/source-dir');
-        const files2 = fs.readdirSync('dest-2/source-dir');
+    await writeArtifact({ dest: 'dest-1', patterns: ['source-dir/**'] });
+    await writeArtifact({ dest: 'dest-2', patterns: 'source-dir/**' });
 
-        t.deepEqual(files1, files2);
-    });
+    const files1 = fs.readdirSync('dest-1/source-dir');
+    const files2 = fs.readdirSync('dest-2/source-dir');
+
+    t.deepEqual(files1, files2);
 });
 
-test('should support patterns as includes', t => {
+test('should support patterns as includes', async t => {
     mockFs({
         'source-dir': {
             'file-1.txt': 'Hi!',
@@ -95,18 +88,16 @@ test('should support patterns as includes', t => {
         }
     });
 
-    return Promise.all([
-        writeArtifact({ dest: 'dest-1', includes: ['source-dir/**'] }),
-        writeArtifact({ dest: 'dest-2', patterns: ['source-dir/**'] })
-    ]).then(() => {
-        const files1 = fs.readdirSync('dest-1/source-dir');
-        const files2 = fs.readdirSync('dest-2/source-dir');
+    await writeArtifact({ dest: 'dest-1', includes: ['source-dir/**'] });
+    await writeArtifact({ dest: 'dest-2', patterns: ['source-dir/**'] });
 
-        t.deepEqual(files1, files2);
-    });
+    const files1 = fs.readdirSync('dest-1/source-dir');
+    const files2 = fs.readdirSync('dest-2/source-dir');
+
+    t.deepEqual(files1, files2);
 });
 
-test('should support patterns as excludes string', t => {
+test('should support patterns as excludes string', async t => {
     mockFs({
         'source-dir': {
             'file-1.txt': 'Hi!',
@@ -114,18 +105,16 @@ test('should support patterns as excludes string', t => {
         }
     });
 
-    return Promise.all([
-        writeArtifact({ dest: 'dest-1', includes: 'source-dir/**', excludes: ['source-dir/file-1.txt'] }),
-        writeArtifact({ dest: 'dest-2', patterns: ['source-dir/**', '!source-dir/file-1.txt'] })
-    ]).then(() => {
-        const files1 = fs.readdirSync('dest-1/source-dir');
-        const files2 = fs.readdirSync('dest-2/source-dir');
+    await writeArtifact({ dest: 'dest-1', includes: 'source-dir/**', excludes: ['source-dir/file-1.txt'] });
+    await writeArtifact({ dest: 'dest-2', patterns: ['source-dir/**', '!source-dir/file-1.txt'] });
 
-        t.deepEqual(files1, files2);
-    });
+    const files1 = fs.readdirSync('dest-1/source-dir');
+    const files2 = fs.readdirSync('dest-2/source-dir');
+
+    t.deepEqual(files1, files2);
 });
 
-test('should support excludes with negative patterns', t => {
+test('should support excludes with negative patterns', async t => {
     mockFs({
         'source-dir': {
             'file-1.txt': 'Hi!',
@@ -133,13 +122,11 @@ test('should support excludes with negative patterns', t => {
         }
     });
 
-    return Promise.all([
-        writeArtifact({ dest: 'dest-1', includes: 'source-dir/**', excludes: ['source-dir/file-1.txt'] }),
-        writeArtifact({ dest: 'dest-2', includes: 'source-dir/**', excludes: ['!source-dir/file-1.txt'] })
-    ]).then(() => {
-        const files1 = fs.readdirSync('dest-1/source-dir');
-        const files2 = fs.readdirSync('dest-2/source-dir');
+    await writeArtifact({ dest: 'dest-1', includes: 'source-dir/**', excludes: ['source-dir/file-1.txt'] });
+    await writeArtifact({ dest: 'dest-2', includes: 'source-dir/**', excludes: ['!source-dir/file-1.txt'] });
 
-        t.deepEqual(files1, files2);
-    });
+    const files1 = fs.readdirSync('dest-1/source-dir');
+    const files2 = fs.readdirSync('dest-2/source-dir');
+
+    t.deepEqual(files1, files2);
 });

@@ -10,28 +10,24 @@ const writeArtifact = promisify(require('../../lib/write-artifact'));
 
 test.afterEach(() => mockFs.restore());
 
-test('should create empty dir', t => {
+test('should create empty dir', async t => {
     mockFs({
         'source-dir': {}
     });
 
-    return writeArtifact({ dest: 'dest-dir', includes: ['source-dir/**'] })
-        .then(() => {
-            const files = fs.readdirSync('dest-dir');
+    await writeArtifact({ dest: 'dest-dir', includes: ['source-dir/**'] });
+    const files = fs.readdirSync('dest-dir');
 
-            t.deepEqual(files, []);
-        });
+    t.deepEqual(files, []);
 });
 
-test('should create dir by depth path', t => {
+test('should create dir by depth path', async t => {
     mockFs({
         'source-dir': {}
     });
 
-    return writeArtifact({ dest: './path/to/dest-dir/', includes: ['source-dir/**'] })
-        .then(() => {
-            const stats = fs.statSync('./path/to/dest-dir/');
+    await writeArtifact({ dest: './path/to/dest-dir/', includes: ['source-dir/**'] });
+    const stats = fs.statSync('./path/to/dest-dir/');
 
-            t.true(stats.isDirectory());
-        });
+    t.true(stats.isDirectory());
 });

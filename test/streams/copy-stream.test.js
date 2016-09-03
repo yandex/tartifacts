@@ -19,20 +19,19 @@ const dest = path.resolve('dest-dir');
 
 test.afterEach(() => mockFs.restore());
 
-test('should not copy empty dir', t => {
+test('should not copy empty dir', async t => {
     mockFs({
         'source-dir': {}
     });
 
-    return copyFiles([])
-        .then(() => {
-            const dirs = fs.readdirSync('./');
+    await copyFiles([]);
 
-            t.deepEqual(dirs, ['source-dir']);
-        });
+    const dirs = fs.readdirSync('./');
+
+    t.deepEqual(dirs, ['source-dir']);
 });
 
-test('should copy files', t => {
+test('should copy files', async t => {
     mockFs({
         'source-dir': {
             'file-1.txt': 'Hi!',
@@ -40,30 +39,28 @@ test('should copy files', t => {
         }
     });
 
-    return copyFiles(['file-1.txt', 'file-2.txt'])
-        .then(() => {
-            const files = fs.readdirSync(path.join(dest, 'source-dir'));
+    await copyFiles(['file-1.txt', 'file-2.txt']);
 
-            t.deepEqual(files, ['file-1.txt', 'file-2.txt']);
-        });
+    const files = fs.readdirSync(path.join(dest, 'source-dir'));
+
+    t.deepEqual(files, ['file-1.txt', 'file-2.txt']);
 });
 
-test('should copy file with contents', t => {
+test('should copy file with contents', async t => {
     mockFs({
         'source-dir': {
             'file-1.txt': 'Hi!'
         }
     });
 
-    return copyFiles(['file-1.txt'])
-        .then(() => {
-            const str = fs.readFileSync(path.join(dest, 'source-dir', 'file-1.txt'), 'utf-8');
+    await copyFiles(['file-1.txt']);
 
-            t.is(str, 'Hi!');
-        });
+    const str = fs.readFileSync(path.join(dest, 'source-dir', 'file-1.txt'), 'utf-8');
+
+    t.is(str, 'Hi!');
 });
 
-test('should copy dir with subdirs', t => {
+test('should copy dir with subdirs', async t => {
     mockFs({
         'source-dir': {
             'sub-dir': {
@@ -73,15 +70,14 @@ test('should copy dir with subdirs', t => {
         }
     });
 
-    return copyFiles(['sub-dir/file-1.txt', 'sub-dir/file-2.txt'])
-        .then(() => {
-            const files = fs.readdirSync(path.join(dest, 'source-dir', 'sub-dir'));
+    await copyFiles(['sub-dir/file-1.txt', 'sub-dir/file-2.txt']);
 
-            t.deepEqual(files, ['file-1.txt', 'file-2.txt']);
-        });
+    const files = fs.readdirSync(path.join(dest, 'source-dir', 'sub-dir'));
+
+    t.deepEqual(files, ['file-1.txt', 'file-2.txt']);
 });
 
-test('should ignore directory chunk', t => {
+test('should ignore directory chunk', async t => {
     mockFs({
         'source-dir': {
             'file-1.txt': 'Hi!',
@@ -89,15 +85,14 @@ test('should ignore directory chunk', t => {
         }
     });
 
-    return copyFiles(['file-1.txt', 'sub-dir'])
-        .then(() => {
-            const files = fs.readdirSync(path.join(dest, 'source-dir'));
+    await copyFiles(['file-1.txt', 'sub-dir']);
 
-            t.deepEqual(files, ['file-1.txt']);
-        });
+    const files = fs.readdirSync(path.join(dest, 'source-dir'));
+
+    t.deepEqual(files, ['file-1.txt']);
 });
 
-test('should copy source file of symlink', t => {
+test('should copy source file of symlink', async t => {
     mockFs({
         'file-1.txt': 'Hi!',
         'source-dir': {
@@ -107,17 +102,15 @@ test('should copy source file of symlink', t => {
         }
     });
 
-    return copyFiles(['symlink.txt'])
-        .then(() => {
-            fs.unlinkSync('./file-1.txt');
+    await copyFiles(['symlink.txt']);
+    fs.unlinkSync('./file-1.txt');
 
-            const str = fs.readFileSync(path.join(dest, 'source-dir', 'symlink.txt'), 'utf-8');
+    const str = fs.readFileSync(path.join(dest, 'source-dir', 'symlink.txt'), 'utf-8');
 
-            t.deepEqual(str, 'Hi!');
-        });
+    t.deepEqual(str, 'Hi!');
 });
 
-test('should ignore broken symlinks', t => {
+test('should ignore broken symlinks', async t => {
     mockFs({
         'source-dir': {
             'file-1.txt': 'Hi!',
@@ -127,15 +120,14 @@ test('should ignore broken symlinks', t => {
         }
     });
 
-    return copyFiles(['file-1.txt', 'symlink.txt'])
-        .then(() => {
-            const files = fs.readdirSync(path.join(dest, 'source-dir'));
+    await copyFiles(['file-1.txt', 'symlink.txt']);
 
-            t.deepEqual(files, ['file-1.txt']);
-        });
+    const files = fs.readdirSync(path.join(dest, 'source-dir'));
+
+    t.deepEqual(files, ['file-1.txt']);
 });
 
-test('should ignore empty file', t => {
+test('should ignore empty file', async t => {
     mockFs({
         'source-dir': {
             'file-1.txt': 'Hi!',
@@ -143,15 +135,14 @@ test('should ignore empty file', t => {
         }
     });
 
-    return copyFiles(['file-1.txt', 'empty-file.txt'])
-        .then(() => {
-            const files = fs.readdirSync(path.join(dest, 'source-dir'));
+    await copyFiles(['file-1.txt', 'empty-file.txt']);
 
-            t.deepEqual(files, ['file-1.txt']);
-        });
+    const files = fs.readdirSync(path.join(dest, 'source-dir'));
+
+    t.deepEqual(files, ['file-1.txt']);
 });
 
-test('should copy empty file', t => {
+test('should copy empty file', async t => {
     mockFs({
         'source-dir': {
             'empty-file.txt': mockFs.file(),
@@ -159,12 +150,11 @@ test('should copy empty file', t => {
         }
     });
 
-    return copyFiles(['empty-file.txt', 'file-1.txt'], { emptyFiles: true })
-        .then(() => {
-            const files = fs.readdirSync(path.join(dest, 'source-dir'));
+    await copyFiles(['empty-file.txt', 'file-1.txt'], { emptyFiles: true });
 
-            t.deepEqual(files, ['empty-file.txt', 'file-1.txt']);
-        });
+    const files = fs.readdirSync(path.join(dest, 'source-dir'));
+
+    t.deepEqual(files, ['empty-file.txt', 'file-1.txt']);
 });
 
 test('should emit error if file file does not exist', t => {
