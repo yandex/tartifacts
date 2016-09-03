@@ -1,5 +1,8 @@
 'use strict';
 
+const promisify = require('es6-promisify');
+const each = promisify(require('async-each'));
+
 const writeArtifact = require('./lib/write-artifact');
 
 /**
@@ -19,5 +22,5 @@ module.exports = (artifacts, options) => {
         artifacts = [artifacts];
     }
 
-    return Promise.all(artifacts.map(artifact => writeArtifact(artifact, options)));
+    return each(artifacts, (artifact, callback) => writeArtifact(artifact, options, callback));
 };

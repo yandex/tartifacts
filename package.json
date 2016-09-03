@@ -30,13 +30,16 @@
   },
   "dependencies": {
     "archiver": "1.1.0",
+    "async-each": "1.0.1",
     "copy": "0.3.0",
+    "es6-promisify": "4.1.0",
     "glob-stream": "5.3.4",
     "meow": "3.7.0",
     "mkdirp": "0.5.1"
   },
   "devDependencies": {
     "ava": "^0.16.0",
+    "babel-eslint": "^6.1.2",
     "coveralls": "^2.11.9",
     "eslint": "^3.0.0",
     "eslint-config-pedant": "^0.8.0",

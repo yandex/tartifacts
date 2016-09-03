@@ -4,14 +4,15 @@ const fs = require('fs');
 
 const test = require('ava');
 const mockFs = require('mock-fs');
+const promisify = require('es6-promisify');
 const isTar = require('is-tar');
 const isGzip = require('is-gzip');
 
-const writeArtifact = require('../../lib/write-artifact');
+const writeArtifact = promisify(require('../../lib/write-artifact'));
 
 test.afterEach(() => mockFs.restore());
 
-test('should pack to tarball', t => {
+test('should pack to tarball', async t => {
     mockFs({
         'source-dir': {
             'file-1.txt': 'Hi!',
@@ -19,19 +20,18 @@ test('should pack to tarball', t => {
         }
     });
 
-    return writeArtifact({
-            dest: 'dest-file',
-            includes: 'source-dir/**',
-            tar: true
-        })
-        .then(() => {
-            const tarball = fs.readFileSync('dest-file');
+    await writeArtifact({
+        dest: 'dest-file',
+        includes: 'source-dir/**',
+        tar: true
+    });
 
-            t.true(isTar(tarball));
-        });
+    const tarball = fs.readFileSync('dest-file');
+
+    t.true(isTar(tarball));
 });
 
-test('should pack to tarball with gzip', t => {
+test('should pack to tarball with gzip', async t => {
     mockFs({
         'source-dir': {
             'file-1.txt': 'Hi!',
@@ -39,20 +39,19 @@ test('should pack to tarball with gzip', t => {
         }
     });
 
-    return writeArtifact({
-            dest: 'dest-file',
-            includes: 'source-dir/**',
-            tar: true,
-            gzip: true
-        })
-        .then(() => {
-            const gz = fs.readFileSync('dest-file');
+    await writeArtifact({
+        dest: 'dest-file',
+        includes: 'source-dir/**',
+        tar: true,
+        gzip: true
+    });
 
-            t.true(isGzip(gz));
-        });
+    const gz = fs.readFileSync('dest-file');
+
+    t.true(isGzip(gz));
 });
 
-test('should pack to tarball with gzip using gzip options', t => {
+test('should pack to tarball with gzip using gzip options', async t => {
     mockFs({
         'source-dir': {
             'file-1.txt': 'Hi!',
@@ -60,15 +59,14 @@ test('should pack to tarball with gzip using gzip options', t => {
         }
     });
 
-    return writeArtifact({
-            dest: 'dest-file',
-            includes: 'source-dir/**',
-            tar: true,
-            gzip: { level: 1 }
-        })
-        .then(() => {
-            const gz = fs.readFileSync('dest-file');
+    await writeArtifact({
+        dest: 'dest-file',
+        includes: 'source-dir/**',
+        tar: true,
+        gzip: { level: 1 }
+    });
 
-            t.true(isGzip(gz));
-        });
+    const gz = fs.readFileSync('dest-file');
+
+    t.true(isGzip(gz));
 });

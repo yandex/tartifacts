@@ -7,13 +7,14 @@ process.env.UNLAZY = true;
 const fs = require('fs');
 
 const test = require('ava');
+const promisify = require('es6-promisify');
 const mockFs = require('mock-fs');
 
-const writeArtifact = require('../../lib/write-artifact');
+const writeArtifact = promisify(require('../../lib/write-artifact'));
 
 test.afterEach(() => mockFs.restore());
 
-test('should include files', t => {
+test('should include files', async t => {
     mockFs({
         'source-dir': {
             'file-1.txt': 'Hi!',
@@ -21,18 +22,17 @@ test('should include files', t => {
         }
     });
 
-    return writeArtifact({
-            dest: 'dest-dir',
-            patterns: ['source-dir/**']
-        })
-        .then(() => {
-            const files = fs.readdirSync('dest-dir/source-dir');
+    await writeArtifact({
+        dest: 'dest-dir',
+        patterns: ['source-dir/**']
+    });
 
-            t.deepEqual(files, ['file-1.txt', 'file-2.txt']);
-        });
+    const files = fs.readdirSync('dest-dir/source-dir');
+
+    t.deepEqual(files, ['file-1.txt', 'file-2.txt']);
 });
 
-test('should exclude files', t => {
+test('should exclude files', async t => {
     mockFs({
         'source-dir': {
             'file-1.txt': 'Hi!',
@@ -40,18 +40,17 @@ test('should exclude files', t => {
         }
     });
 
-    return writeArtifact({
-            dest: 'dest-dir',
-            patterns: ['source-dir/**', '!source-dir/file-2.txt']
-        })
-        .then(() => {
-            const files = fs.readdirSync('dest-dir/source-dir');
+    await writeArtifact({
+        dest: 'dest-dir',
+        patterns: ['source-dir/**', '!source-dir/file-2.txt']
+    });
 
-            t.deepEqual(files, ['file-1.txt']);
-        });
+    const files = fs.readdirSync('dest-dir/source-dir');
+
+    t.deepEqual(files, ['file-1.txt']);
 });
 
-test('should override negative pattern', t => {
+test('should override negative pattern', async t => {
     mockFs({
         'source-dir': {
             'file-1.txt': 'Hi!',
@@ -59,17 +58,16 @@ test('should override negative pattern', t => {
         }
     });
 
-    return writeArtifact({
-            dest: 'dest-dir',
-            patterns: [
-                'source-dir/**',
-                '!source-dir/file-2.txt',
-                'source-dir/file-2.txt'
-            ]
-        })
-        .then(() => {
-            const files = fs.readdirSync('dest-dir/source-dir');
+    await writeArtifact({
+        dest: 'dest-dir',
+        patterns: [
+            'source-dir/**',
+            '!source-dir/file-2.txt',
+            'source-dir/file-2.txt'
+        ]
+    });
 
-            t.deepEqual(files, ['file-1.txt', 'file-2.txt']);
-        });
+    const files = fs.readdirSync('dest-dir/source-dir');
+
+    t.deepEqual(files, ['file-1.txt', 'file-2.txt']);
 });
