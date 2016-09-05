@@ -22,8 +22,8 @@ module.exports = (artifacts, options) => {
 
     const defaults = {
         root: process.cwd(),
-        dotFiles: false,
-        emptyFiles: false
+        dotFiles: true,
+        emptyFiles: true
     };
     const opts = Object.assign(defaults, options);
 
