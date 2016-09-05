@@ -62,18 +62,17 @@ test('should create tarball with subdirs', async t => {
     t.deepEqual(files, ['sub-dir/file-1.txt', 'sub-dir/file-2.txt']);
 });
 
-test('should ignore directory chunk', async t => {
+test('should include directory without files', async t => {
     mockFs({
         'source-dir': {
-            'file-1.txt': 'Hi!',
             'sub-dir': { 'file-2.txt': 'Hello!' }
         }
     });
 
-    await packFiles(['file-1.txt', 'sub-dir']);
+    await packFiles(['sub-dir/']);
     const files = await extractFiles();
 
-    t.deepEqual(files, ['file-1.txt']);
+    t.deepEqual(files, ['sub-dir/']);
 });
 
 test('should take into account symlink', async t => {
