@@ -126,21 +126,6 @@ test('should ignore broken symlinks', async t => {
     t.deepEqual(files, ['file-1.txt']);
 });
 
-test('should ignore empty file', async t => {
-    mockFs({
-        'source-dir': {
-            'file-1.txt': 'Hi!',
-            'empty-file.txt': mockFs.file()
-        }
-    });
-
-    await copyFiles(['file-1.txt', 'empty-file.txt']);
-
-    const files = fs.readdirSync(path.join(dest, 'source-dir'));
-
-    t.deepEqual(files, ['file-1.txt']);
-});
-
 test('should copy empty file', async t => {
     mockFs({
         'source-dir': {
@@ -149,11 +134,26 @@ test('should copy empty file', async t => {
         }
     });
 
-    await copyFiles(['empty-file.txt', 'file-1.txt'], { emptyFiles: true });
+    await copyFiles(['empty-file.txt', 'file-1.txt']);
 
     const files = fs.readdirSync(path.join(dest, 'source-dir'));
 
     t.deepEqual(files, ['empty-file.txt', 'file-1.txt']);
+});
+
+test('should ignore empty file', async t => {
+    mockFs({
+        'source-dir': {
+            'file-1.txt': 'Hi!',
+            'empty-file.txt': mockFs.file()
+        }
+    });
+
+    await copyFiles(['file-1.txt', 'empty-file.txt'], { emptyFiles: false });
+
+    const files = fs.readdirSync(path.join(dest, 'source-dir'));
+
+    t.deepEqual(files, ['file-1.txt']);
 });
 
 test('should emit error if file file does not exist', t => {
