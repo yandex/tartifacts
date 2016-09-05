@@ -9,6 +9,7 @@ const isTar = require('is-tar');
 const isGzip = require('is-gzip');
 
 const writeArtifact = promisify(require('../../lib/write-artifact'));
+const cwd = process.cwd();
 
 test.afterEach(() => mockFs.restore());
 
@@ -24,7 +25,7 @@ test('should pack to tarball', async t => {
         dest: 'dest-file',
         includes: 'source-dir/**',
         tar: true
-    });
+    }, { root: cwd });
 
     const tarball = fs.readFileSync('dest-file');
 
@@ -44,7 +45,7 @@ test('should pack to tarball with gzip', async t => {
         includes: 'source-dir/**',
         tar: true,
         gzip: true
-    });
+    }, { root: cwd });
 
     const gz = fs.readFileSync('dest-file');
 
@@ -64,7 +65,7 @@ test('should pack to tarball with gzip using gzip options', async t => {
         includes: 'source-dir/**',
         tar: true,
         gzip: { level: 1 }
-    });
+    }, { root: cwd });
 
     const gz = fs.readFileSync('dest-file');
 

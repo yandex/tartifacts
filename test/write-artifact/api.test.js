@@ -11,6 +11,7 @@ const promisify = require('es6-promisify');
 const mockFs = require('mock-fs');
 
 const writeArtifact = promisify(require('../../lib/write-artifact'));
+const cwd = process.cwd();
 
 test.afterEach(() => mockFs.restore());
 
@@ -22,7 +23,7 @@ test('should copy artifact by default', async t => {
         }
     });
 
-    await writeArtifact({ dest: 'dest-dir', includes: ['source-dir/**'] });
+    await writeArtifact({ dest: 'dest-dir', includes: ['source-dir/**'] }, { root: cwd });
 
     const stats = fs.statSync('dest-dir');
 
@@ -37,8 +38,8 @@ test('should support include param as string', async t => {
         }
     });
 
-    await writeArtifact({ dest: 'dest-1', includes: ['source-dir/**'] });
-    await writeArtifact({ dest: 'dest-2', includes: 'source-dir/**' });
+    await writeArtifact({ dest: 'dest-1', includes: ['source-dir/**'] }, { root: cwd });
+    await writeArtifact({ dest: 'dest-2', includes: 'source-dir/**' }, { root: cwd });
 
     const files1 = fs.readdirSync('dest-1/source-dir');
     const files2 = fs.readdirSync('dest-2/source-dir');
@@ -54,8 +55,8 @@ test('should support exclude param as string', async t => {
         }
     });
 
-    await writeArtifact({ dest: 'dest-1', includes: ['source-dir/**'], exclude: ['source-dir/file-2.txt'] });
-    await writeArtifact({ dest: 'dest-2', includes: ['source-dir/**'], exclude: 'source-dir/file-2.txt' });
+    await writeArtifact({ dest: 'dest-1', includes: ['source-dir/**'], exclude: ['source-dir/file-2.txt'] }, { root: cwd });
+    await writeArtifact({ dest: 'dest-2', includes: ['source-dir/**'], exclude: 'source-dir/file-2.txt' }, { root: cwd });
 
     const files1 = fs.readdirSync('dest-1/source-dir');
     const files2 = fs.readdirSync('dest-2/source-dir');
@@ -71,8 +72,8 @@ test('should support patterns param as string', async t => {
         }
     });
 
-    await writeArtifact({ dest: 'dest-1', patterns: ['source-dir/**'] });
-    await writeArtifact({ dest: 'dest-2', patterns: 'source-dir/**' });
+    await writeArtifact({ dest: 'dest-1', patterns: ['source-dir/**'] }, { root: cwd });
+    await writeArtifact({ dest: 'dest-2', patterns: 'source-dir/**' }, { root: cwd });
 
     const files1 = fs.readdirSync('dest-1/source-dir');
     const files2 = fs.readdirSync('dest-2/source-dir');
@@ -88,8 +89,8 @@ test('should support patterns as includes', async t => {
         }
     });
 
-    await writeArtifact({ dest: 'dest-1', includes: ['source-dir/**'] });
-    await writeArtifact({ dest: 'dest-2', patterns: ['source-dir/**'] });
+    await writeArtifact({ dest: 'dest-1', includes: ['source-dir/**'] }, { root: cwd });
+    await writeArtifact({ dest: 'dest-2', patterns: ['source-dir/**'] }, { root: cwd });
 
     const files1 = fs.readdirSync('dest-1/source-dir');
     const files2 = fs.readdirSync('dest-2/source-dir');
@@ -105,8 +106,8 @@ test('should support patterns as excludes string', async t => {
         }
     });
 
-    await writeArtifact({ dest: 'dest-1', includes: 'source-dir/**', excludes: ['source-dir/file-1.txt'] });
-    await writeArtifact({ dest: 'dest-2', patterns: ['source-dir/**', '!source-dir/file-1.txt'] });
+    await writeArtifact({ dest: 'dest-1', includes: 'source-dir/**', excludes: ['source-dir/file-1.txt'] }, { root: cwd });
+    await writeArtifact({ dest: 'dest-2', patterns: ['source-dir/**', '!source-dir/file-1.txt'] }, { root: cwd });
 
     const files1 = fs.readdirSync('dest-1/source-dir');
     const files2 = fs.readdirSync('dest-2/source-dir');
@@ -122,8 +123,8 @@ test('should support excludes with negative patterns', async t => {
         }
     });
 
-    await writeArtifact({ dest: 'dest-1', includes: 'source-dir/**', excludes: ['source-dir/file-1.txt'] });
-    await writeArtifact({ dest: 'dest-2', includes: 'source-dir/**', excludes: ['!source-dir/file-1.txt'] });
+    await writeArtifact({ dest: 'dest-1', includes: 'source-dir/**', excludes: ['source-dir/file-1.txt'] }, { root: cwd });
+    await writeArtifact({ dest: 'dest-2', includes: 'source-dir/**', excludes: ['!source-dir/file-1.txt'] }, { root: cwd });
 
     const files1 = fs.readdirSync('dest-1/source-dir');
     const files2 = fs.readdirSync('dest-2/source-dir');
