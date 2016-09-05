@@ -68,7 +68,7 @@ const artifacts = [
 
 tartifacts(artifacts, {
     root: __dirname,  // `process.cwd()` by default
-    dot: true,        // include dotfiles
+    dotFiles: true,   // include dotfiles
     emptyFiles: true  // include empty files
 })
 .then(() => console.log('Copying or packaging completed!'))
