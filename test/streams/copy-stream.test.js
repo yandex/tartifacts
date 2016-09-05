@@ -77,19 +77,18 @@ test('should copy dir with subdirs', async t => {
     t.deepEqual(files, ['file-1.txt', 'file-2.txt']);
 });
 
-test('should ignore directory chunk', async t => {
+test('should copy directory without files', async t => {
     mockFs({
         'source-dir': {
-            'file-1.txt': 'Hi!',
             'sub-dir': { 'file-2.txt': 'Hello!' }
         }
     });
 
-    await copyFiles(['file-1.txt', 'sub-dir']);
+    await copyFiles(['sub-dir/']);
 
     const files = fs.readdirSync(path.join(dest, 'source-dir'));
 
-    t.deepEqual(files, ['file-1.txt']);
+    t.deepEqual(files, ['sub-dir']);
 });
 
 test('should copy source file of symlink', async t => {
