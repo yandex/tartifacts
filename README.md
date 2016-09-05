@@ -191,14 +191,14 @@ The path to root directory.
 #### dotFiles
 
 Type: `boolean`
-Default: `false`
+Default: `true`
 
 Include dotfiles.
 
 #### emptyFiles
 
 Type: `boolean`
-Default: `false`
+Default: `true`
 
 Include empty files.
 
