@@ -111,7 +111,7 @@ test('should ignore broken symlinks', async t => {
     t.deepEqual(files, ['file-1.txt']);
 });
 
-test('should ignore empty file', async t => {
+test('should include empty file', async t => {
     mockFs({
         'source-dir': {
             'empty-file.txt': mockFs.file(),
@@ -122,10 +122,10 @@ test('should ignore empty file', async t => {
     await packFiles(['empty-file.txt', 'file-1.txt']);
     const files = await extractFiles();
 
-    t.deepEqual(files, ['file-1.txt']);
+    t.deepEqual(files, ['empty-file.txt', 'file-1.txt']);
 });
 
-test('should include empty file', async t => {
+test('should ignore empty file', async t => {
     mockFs({
         'source-dir': {
             'empty-file.txt': mockFs.file(),
@@ -133,10 +133,10 @@ test('should include empty file', async t => {
         }
     });
 
-    await packFiles(['empty-file.txt', 'file-1.txt'], { emptyFiles: true });
+    await packFiles(['empty-file.txt', 'file-1.txt'], { emptyFiles: false });
     const files = await extractFiles();
 
-    t.deepEqual(files, ['empty-file.txt', 'file-1.txt']);
+    t.deepEqual(files, ['file-1.txt']);
 });
 
 test('should emit error if file file does not exist', t => {
