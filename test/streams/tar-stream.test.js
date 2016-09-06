@@ -10,8 +10,7 @@ const tar = require('tar');
 
 const TarStream = require('../../lib/streams/tar-stream');
 
-const cwd = process.cwd();
-const base = path.resolve('source-dir');
+const root = path.resolve('source-dir');
 const dest = path.resolve('dest.tar');
 const resdir = path.resolve('res-dir');
 
@@ -173,7 +172,7 @@ function extractFiles(dir) {
 
 function findFiles(filenames) {
     const files = filenames.map(basename => {
-        return { path: path.join(base, basename), base, cwd };
+        return { path: path.join(root, basename), base: root, cwd: root };
     });
 
     return streamify(files);

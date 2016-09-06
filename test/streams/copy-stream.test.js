@@ -13,8 +13,7 @@ const streamify = require('stream-array');
 
 const CopyFileStream = require('../../lib/streams/copy-stream');
 
-const cwd = process.cwd();
-const base = path.resolve('source-dir');
+const root = path.resolve('source-dir');
 const dest = path.resolve('dest-dir');
 
 test.afterEach(() => mockFs.restore());
@@ -41,7 +40,7 @@ test('should copy files', async t => {
 
     await copyFiles(['file-1.txt', 'file-2.txt']);
 
-    const files = fs.readdirSync(path.join(dest, 'source-dir'));
+    const files = fs.readdirSync(path.join(dest));
 
     t.deepEqual(files, ['file-1.txt', 'file-2.txt']);
 });
@@ -55,7 +54,7 @@ test('should copy file with contents', async t => {
 
     await copyFiles(['file-1.txt']);
 
-    const str = fs.readFileSync(path.join(dest, 'source-dir', 'file-1.txt'), 'utf-8');
+    const str = fs.readFileSync(path.join(dest, 'file-1.txt'), 'utf-8');
 
     t.is(str, 'Hi!');
 });
@@ -72,7 +71,7 @@ test('should copy dir with subdirs', async t => {
 
     await copyFiles(['sub-dir/file-1.txt', 'sub-dir/file-2.txt']);
 
-    const files = fs.readdirSync(path.join(dest, 'source-dir', 'sub-dir'));
+    const files = fs.readdirSync(path.join(dest, 'sub-dir'));
 
     t.deepEqual(files, ['file-1.txt', 'file-2.txt']);
 });
@@ -86,7 +85,7 @@ test('should copy directory without files', async t => {
 
     await copyFiles(['sub-dir/']);
 
-    const files = fs.readdirSync(path.join(dest, 'source-dir'));
+    const files = fs.readdirSync(path.join(dest));
 
     t.deepEqual(files, ['sub-dir']);
 });
@@ -104,7 +103,7 @@ test('should copy source file of symlink', async t => {
     await copyFiles(['symlink.txt']);
     fs.unlinkSync('./file-1.txt');
 
-    const str = fs.readFileSync(path.join(dest, 'source-dir', 'symlink.txt'), 'utf-8');
+    const str = fs.readFileSync(path.join(dest, 'symlink.txt'), 'utf-8');
 
     t.deepEqual(str, 'Hi!');
 });
@@ -121,7 +120,7 @@ test('should ignore broken symlinks', async t => {
 
     await copyFiles(['file-1.txt', 'symlink.txt']);
 
-    const files = fs.readdirSync(path.join(dest, 'source-dir'));
+    const files = fs.readdirSync(path.join(dest));
 
     t.deepEqual(files, ['file-1.txt']);
 });
@@ -136,7 +135,7 @@ test('should copy empty file', async t => {
 
     await copyFiles(['empty-file.txt', 'file-1.txt']);
 
-    const files = fs.readdirSync(path.join(dest, 'source-dir'));
+    const files = fs.readdirSync(path.join(dest));
 
     t.deepEqual(files, ['empty-file.txt', 'file-1.txt']);
 });
@@ -151,7 +150,7 @@ test('should ignore empty file', async t => {
 
     await copyFiles(['file-1.txt', 'empty-file.txt'], { emptyFiles: false });
 
-    const files = fs.readdirSync(path.join(dest, 'source-dir'));
+    const files = fs.readdirSync(path.join(dest));
 
     t.deepEqual(files, ['file-1.txt']);
 });
@@ -176,7 +175,7 @@ function copyFiles(filenames, options) {
 
 function findFiles(filenames) {
     const files = filenames.map(basename => {
-        return { path: path.join(base, basename), base, cwd };
+        return { path: path.join(root, basename), base: root, cwd: root };
     });
 
     return streamify(files);
