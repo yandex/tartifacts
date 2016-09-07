@@ -69,7 +69,8 @@ const artifacts = [
 tartifacts(artifacts, {
     root: __dirname,  // `process.cwd()` by default
     dotFiles: true,   // include dotfiles
-    emptyFiles: true  // include empty files
+    emptyFiles: true  // include empty files,
+    emptyDirs: false  // include empty directories
 })
 .then(() => console.log('Copying or packaging completed!'))
 .catch(err => console.log(err));
@@ -201,6 +202,13 @@ Type: `boolean`
 Default: `true`
 
 Include empty files.
+
+#### emptyDirs
+
+Type: `boolean`
+Default: `true`
+
+Include empty directories.
 
 License
 -------
