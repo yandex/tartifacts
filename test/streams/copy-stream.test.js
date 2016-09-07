@@ -90,6 +90,21 @@ test('should copy directory without files', async t => {
     t.deepEqual(files, ['sub-dir']);
 });
 
+test('should ignore directory without files', async t => {
+    mockFs({
+        'source-dir': {
+            'file-1.txt': 'Hi!',
+            'sub-dir': { 'file-2.txt': 'Hello!' }
+        }
+    });
+
+    await copyFiles(['file-1.txt', 'sub-dir/'], { emptyDirs: false });
+
+    const files = fs.readdirSync(path.join(dest));
+
+    t.deepEqual(files, ['file-1.txt']);
+});
+
 test('should copy source file of symlink', async t => {
     mockFs({
         'file-1.txt': 'Hi!',
