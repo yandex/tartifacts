@@ -13,8 +13,9 @@ const writeArtifact = require('./lib/write-artifact');
  * @param {object[]} artifacts                   The artifacts info.
  * @param {object}   [options]                   Options.
  * @param {string}   [options.root=cwd]          The path to root directory. By default is cwd.
- * @param {boolean}  [options.dotFiles=false]    Include dotfiles.
- * @param {boolean}  [options.emptyFiles=false]  Include empty files.
+ * @param {boolean}  [options.dotFiles=true]     Include dotfiles.
+ * @param {boolean}  [options.emptyFiles=true]   Include empty files.
+ * @param {boolean}  [options.emptyDirs=true]    Include empty directories.
  * @returns {Promise}
  */
 module.exports = (artifacts, options) => {
@@ -23,7 +24,8 @@ module.exports = (artifacts, options) => {
     const defaults = {
         root: process.cwd(),
         dotFiles: true,
-        emptyFiles: true
+        emptyFiles: true,
+        emptyDirs: true
     };
     const opts = Object.assign(defaults, options);
 
