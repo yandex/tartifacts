@@ -74,6 +74,19 @@ test('should include directory without files', async t => {
     t.deepEqual(files, ['sub-dir/']);
 });
 
+test('should ignore directory without files', async t => {
+    mockFs({
+        'source-dir': {
+            'sub-dir': { 'file-2.txt': 'Hello!' }
+        }
+    });
+
+    await packFiles(['sub-dir/'], { emptyDirs: false });
+    const files = await extractFiles();
+
+    t.deepEqual(files, []);
+});
+
 test('should take into account symlink', async t => {
     mockFs({
         'file-1.txt': 'Hi!',
