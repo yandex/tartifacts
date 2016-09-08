@@ -2,8 +2,8 @@
 
 const path = require('path');
 
-const promisify = require('es6-promisify');
-const each = promisify(require('async-each'));
+const workerFarm = require('worker-farm');
+const each = require('async-each');
 
 const writeArtifact = require('./lib/write-artifact');
 
@@ -35,5 +35,30 @@ module.exports = (artifacts, options) => {
         artifacts = [artifacts];
     }
 
-    return each(artifacts, (artifact, callback) => writeArtifact(artifact, opts, callback));
+    // do not use child processes for one artifact
+    if (artifacts.length === 1) {
+        return new Promise((resolve, reject) => {
+            writeArtifact(artifacts[0], opts, (err) => {
+                if (err) {
+                    return reject(err);
+                }
+
+                resolve();
+            });
+        });
+    }
+
+    const writeArtifactWorkers = workerFarm(require.resolve('./lib/write-artifact'));
+
+    return new Promise((resolve, reject) => {
+        each(artifacts, (artifact, callback) => writeArtifactWorkers(artifact, opts, callback), (err) => {
+            workerFarm.end(writeArtifactWorkers);
+
+            if (err) {
+                return reject(err);
+            }
+
+            resolve();
+        });
+    });
 };
