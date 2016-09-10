@@ -11,7 +11,7 @@ const test = require('ava');
 const mockFs = require('mock-fs');
 const streamify = require('stream-array');
 
-const CopyFileStream = require('../../lib/streams/copy-stream');
+const CopyFileStream = require('../../lib/streams/copy-artifact-stream');
 
 const root = path.resolve('source-dir');
 const dest = path.resolve('dest-dir');
