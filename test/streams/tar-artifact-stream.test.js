@@ -8,7 +8,7 @@ const mockFs = require('mock-fs');
 const streamify = require('stream-array');
 const tar = require('tar');
 
-const TarStream = require('../../lib/streams/tar-stream');
+const TarStream = require('../../lib/streams/tar-artifact-stream');
 
 const root = path.resolve('source-dir');
 const dest = path.resolve('dest.tar');
