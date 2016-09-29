@@ -1,6 +1,15 @@
 Changelog
 =========
 
+v1.1.4 (2016-09-29)
+-------------------
+
+### Bug Fixes
+
+* Fixed bug in CLI (@blond [#72]).
+
+[#72]: https://github.com/blond/tartifacts/pull/72
+
 v1.1.3 (2016-09-02)
 -------------------
 
