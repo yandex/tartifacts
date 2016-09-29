@@ -42,7 +42,7 @@
   },
   "devDependencies": {
     "ava": "^0.16.0",
-    "babel-eslint": "^6.1.2",
+    "babel-eslint": "^7.0.0",
     "coveralls": "^2.11.9",
     "es6-promisify": "^4.1.0",
     "eslint": "^3.0.0",
