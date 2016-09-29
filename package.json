@@ -34,7 +34,7 @@
     "copy": "0.3.0",
     "glob": "5.0.3",
     "glob-stream": "5.3.5",
-    "graceful-fs": "4.1.6",
+    "graceful-fs": "4.1.9",
     "meow": "3.7.0",
     "mkdirp": "0.5.1",
     "proxyquire": "1.7.10",
