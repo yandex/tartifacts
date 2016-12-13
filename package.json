@@ -29,7 +29,7 @@
     "node": ">= 4.0"
   },
   "dependencies": {
-    "archiver": "1.2.0",
+    "archiver": "1.3.0",
     "async-each": "1.0.1",
     "copy": "0.3.0",
     "glob": "7.1.1",
