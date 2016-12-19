@@ -7,7 +7,7 @@ const path = require('path');
 const meow = require('meow');
 const tartifacts = require('../');
 
-const loadPatterns = require('../lib/load-patterns');
+const loadPatterns = require('../lib/patterns');
 
 const cli = meow(`
     Usage
