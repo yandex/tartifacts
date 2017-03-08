@@ -48,7 +48,7 @@
     "eslint-config-pedant": "^0.8.0",
     "is-gzip": "^1.0.0",
     "is-tar": "^1.0.0",
-    "mock-fs": "3.10.0",
+    "mock-fs": "4.0.0",
     "nyc": "^10.0.0",
     "stream-array": "^1.1.2",
     "tar": "^2.2.1"
