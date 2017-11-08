@@ -7,7 +7,7 @@ const path = require('path');
 const meow = require('meow');
 const tartifacts = require('../');
 
-const loadPatterns = require('../lib/load-patterns');
+const patterns = require('../lib/patterns');
 
 const cli = meow(`
     Usage
@@ -39,7 +39,7 @@ const flags = cli.flags;
 const basename = path.basename(flags.dest);
 const artifact = {
 	dest: flags.dest,
-    patterns: flags.patterns && loadPatterns(flags.patterns),
+    patterns: flags.patterns && patterns.load(flags.patterns),
 	includes: [].concat(flags.include || []),
 	excludes: [].concat(flags.exclude || []),
 	tar: basename.includes('.tar'),
