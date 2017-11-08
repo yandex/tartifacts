@@ -33,7 +33,7 @@
     "async-each": "1.0.1",
     "copy": "0.3.0",
     "glob": "7.1.1",
-    "glob-stream": "5.3.5",
+    "glob-stream": "6.0.0",
     "graceful-fs": "4.1.11",
     "meow": "3.7.0",
     "mkdirp": "0.5.1",
