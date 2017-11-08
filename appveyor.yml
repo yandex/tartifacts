@@ -1,5 +1,9 @@
 version: "{build}"
 
+branches:
+  only:
+    - master
+
 environment:
   nodejs_version: "4"
 
