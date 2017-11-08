@@ -1,6 +1,8 @@
 tartifacts
 ==========
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/blond/tartifacts.svg)](https://greenkeeper.io/)
+
 [![NPM Status][npm-img]][npm]
 [![Travis Status][test-img]][travis]
 [![Windows Status][appveyor-img]][appveyor]
