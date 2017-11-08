@@ -11,16 +11,16 @@ tartifacts
 [npm-img]:      https://img.shields.io/npm/v/tartifacts.svg
 
 [travis]:       https://travis-ci.org/blond/tartifacts
-[test-img]:     https://img.shields.io/travis/blond/tartifacts.svg?label=tests
+[test-img]:     https://img.shields.io/travis/blond/tartifacts/master.svg?label=tests
 
 [appveyor]:     https://ci.appveyor.com/project/blond/tartifacts
-[appveyor-img]: http://img.shields.io/appveyor/ci/blond/tartifacts.svg?style=flat&label=windows
+[appveyor-img]: http://img.shields.io/appveyor/ci/blond/tartifacts/master.svg?label=windows
 
 [coveralls]:    https://coveralls.io/r/blond/tartifacts
-[coverage-img]: https://img.shields.io/coveralls/blond/tartifacts.svg
+[coverage-img]: https://img.shields.io/coveralls/blond/tartifacts/master.svg
 
 [david]:        https://david-dm.org/blond/tartifacts
-[david-img]:    http://img.shields.io/david/blond/tartifacts.svg?style=flat
+[david-img]:    http://img.shields.io/david/blond/tartifacts/master.svg
 
 
 The tool to create artifacts for your assemblies.
