@@ -22,14 +22,13 @@ module.exports = (artifacts, options) => {
     artifacts || (artifacts = []);
 
     const defaults = {
-        root: process.cwd(),
         dotFiles: true,
         emptyFiles: true,
         emptyDirs: true
     };
     const opts = Object.assign(defaults, options);
 
-    opts.root = path.resolve(opts.root);
+    opts.root = path.resolve(opts.root || process.cwd());
 
     if (!Array.isArray(artifacts)) {
         artifacts = [artifacts];
