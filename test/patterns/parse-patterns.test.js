@@ -2,14 +2,14 @@
 
 const test = require('ava');
 
-const parse = require('../../lib/patterns').parse;
+const parsePatterns = require('../../lib/patterns').parse;
 
 test('should parse includes', t => {
     const patterns = [
         'dir/**'
     ].join('\n');
 
-    t.deepEqual(parse(patterns), ['dir/**']);
+    t.deepEqual(parsePatterns(patterns), ['dir/**']);
 });
 
 test('should parse excludes', t => {
@@ -17,7 +17,7 @@ test('should parse excludes', t => {
         '!dir/**'
     ].join('\n');
 
-    t.deepEqual(parse(patterns), ['!dir/**']);
+    t.deepEqual(parsePatterns(patterns), ['!dir/**']);
 });
 
 test('should ignore comments', t => {
@@ -26,7 +26,7 @@ test('should ignore comments', t => {
         'dir/**'
     ].join('\n');
 
-    t.deepEqual(parse(patterns), ['dir/**']);
+    t.deepEqual(parsePatterns(patterns), ['dir/**']);
 });
 
 test('should ignore line comments', t => {
@@ -34,7 +34,7 @@ test('should ignore line comments', t => {
         'dir/** # commnet'
     ].join('\n');
 
-    t.deepEqual(parse(patterns), ['dir/**']);
+    t.deepEqual(parsePatterns(patterns), ['dir/**']);
 });
 
 test('should skip empty lines', t => {
@@ -44,7 +44,7 @@ test('should skip empty lines', t => {
         'dir-2/**'
     ].join('\n');
 
-    t.deepEqual(parse(patterns), ['dir-1/**', 'dir-2/**']);
+    t.deepEqual(parsePatterns(patterns), ['dir-1/**', 'dir-2/**']);
 });
 
 test('should ignore whitespaces', t => {
@@ -54,7 +54,7 @@ test('should ignore whitespaces', t => {
         '  dir-3/** '
     ].join('\n');
 
-    t.deepEqual(parse(patterns), ['dir-1/**', 'dir-2/**', 'dir-3/**']);
+    t.deepEqual(parsePatterns(patterns), ['dir-1/**', 'dir-2/**', 'dir-3/**']);
 });
 
 test('should support window EOL', t => {
@@ -63,7 +63,7 @@ test('should support window EOL', t => {
         'dir-2/** '
     ].join('\r\n');
 
-    t.deepEqual(parse(patterns), ['dir-1/**', 'dir-2/**']);
+    t.deepEqual(parsePatterns(patterns), ['dir-1/**', 'dir-2/**']);
 });
 
 test('should support array', t => {
@@ -71,5 +71,5 @@ test('should support array', t => {
         'dir-1/**'
     ];
 
-    t.deepEqual(parse(patterns), ['dir-1/**']);
+    t.deepEqual(parsePatterns(patterns), ['dir-1/**']);
 });
