@@ -35,7 +35,7 @@ test.failing('should load json patterns', async t => {
     t.deepEqual(patterns, ['lib/**', '!lib/**/*.test.js']);
 });
 
-test.skip('should load pattern module', async t => {
+test('should load pattern module', async t => {
     mockFs({
         'patterns.js': [
             'module.exports = ["lib/**", "!lib/**/*.test.js"];',
@@ -47,7 +47,7 @@ test.skip('should load pattern module', async t => {
     t.deepEqual(patterns, ['lib/**', '!lib/**/*.test.js']);
 });
 
-test.skip('should load function', async t => {
+test('should load function', async t => {
     mockFs({
         'patterns.js': [
             'module.exports = () => ["lib/**", "!lib/**/*.test.js"];',

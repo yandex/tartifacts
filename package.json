@@ -38,6 +38,7 @@
     "graceful-fs": "4.1.11",
     "meow": "3.7.0",
     "mkdirp": "0.5.1",
+    "node-file-eval": "1.0.0",
     "proxyquire": "1.7.11",
     "worker-farm": "1.3.1"
   },
