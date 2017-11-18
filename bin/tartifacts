@@ -36,22 +36,32 @@ const cli = meow(`
 });
 
 const flags = cli.flags;
-const basename = path.basename(flags.dest);
-const artifact = {
-	dest: flags.dest,
-    patterns: flags.patterns && patterns.load(flags.patterns),
-	includes: [].concat(flags.include || []),
-	excludes: [].concat(flags.exclude || []),
-	tar: basename.includes('.tar'),
-	gzip: basename.includes('.gz')
+const loadPatterns = () => {
+    if (!flags.patterns) {
+        return Promise.resolve();
+    }
+
+    return patterns.load(flags.patterns);
 };
 
-const options = {
-    root: flags.root
-};
+loadPatterns().then(patterns => {
+    const basename = path.basename(flags.dest);
+    const artifact = {
+        dest: flags.dest,
+        patterns: patterns,
+        includes: [].concat(flags.include || []),
+        excludes: [].concat(flags.exclude || []),
+        tar: basename.includes('.tar'),
+        gzip: basename.includes('.gz')
+    };
+
+    const options = {
+        root: flags.root
+    };
+
+    return tartifacts(artifact, options);
+});
 
 if (Object.keys(flags).length === 0) {
     cli.showHelp();
 }
-
-tartifacts(artifact, options);
