@@ -7,7 +7,7 @@ const loadPatterns = require('../../lib/patterns').load;
 
 test.afterEach(() => mockFs.restore());
 
-test('should load text patterns', t => {
+test('should load text patterns', async t => {
     mockFs({
         'patterns': [
             '# include lib',
@@ -18,43 +18,43 @@ test('should load text patterns', t => {
         ].join('\n')
     });
 
-    const patterns = loadPatterns('./patterns');
+    const patterns = await loadPatterns('./patterns');
 
     t.deepEqual(patterns, ['lib/**', '!lib/**/*.test.js']);
 });
 
-test.failing('should load json patterns', t => {
+test.failing('should load json patterns', async t => {
     mockFs({
         'patterns.json': [
             '["lib/**", "!lib/**/*.test.js"]',
         ].join('\n')
     });
 
-    const patterns = loadPatterns('./patterns.json');
+    const patterns = await loadPatterns('./patterns.json');
 
     t.deepEqual(patterns, ['lib/**', '!lib/**/*.test.js']);
 });
 
-test.failing('should load pattern module', t => {
+test.skip('should load pattern module', async t => {
     mockFs({
         'patterns.js': [
             'module.exports = ["lib/**", "!lib/**/*.test.js"];',
         ].join('\n')
     });
 
-    const patterns = loadPatterns('./patterns.js');
+    const patterns = await loadPatterns('./patterns.js');
 
     t.deepEqual(patterns, ['lib/**', '!lib/**/*.test.js']);
 });
 
-test.failing('should load function', t => {
+test.skip('should load function', async t => {
     mockFs({
         'patterns.js': [
             'module.exports = () => ["lib/**", "!lib/**/*.test.js"];',
         ].join('\n')
     });
 
-    const patterns = loadPatterns('./patterns.js');
+    const patterns = await loadPatterns('./patterns.js');
 
     t.deepEqual(patterns, ['lib/**', '!lib/**/*.test.js']);
 });
