@@ -22,6 +22,21 @@ test('should create dest dir', async t => {
     t.deepEqual(files, ['source-dir']);
 });
 
+test('should create dest dir from root', async t => {
+    mockFs({
+        '/root/source-dir': {}
+    });
+
+    await writeArtifact({ dest: 'dest-dir', includes: ['source-dir/'] }, {
+        root: '/root',
+        emptyDirs: true
+    });
+
+    const stats = fs.statSync('/root/dest-dir/');
+
+    t.true(stats.isDirectory());
+});
+
 test('should create dir by depth path', async t => {
     mockFs({
         'source-dir': {}
