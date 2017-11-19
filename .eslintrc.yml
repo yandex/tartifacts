@@ -1,9 +1,12 @@
 parserOptions:
   ecmaVersion: 2017
-  sourceType: module
+  sourceType: script
 
 env:
   node: true
   es6: true
 
 extends: pedant
+
+rules:
+  strict: [error, global]
