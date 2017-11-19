@@ -1,3 +1,5 @@
+'use strict';
+
 const tartifacts = require('../index');
 
 tartifacts({
