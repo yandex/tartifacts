@@ -10,12 +10,12 @@ const test = require('ava');
 const promisify = require('es6-promisify');
 const mockFs = require('mock-fs');
 
-const writeArtifact = promisify(require('../../lib/write-artifact'));
+const writeArtifact = promisify(require('../../lib/artifacts').write);
 const cwd = process.cwd();
 
 test.afterEach(() => mockFs.restore());
 
-test('should not include dot files by default', async t => {
+test('should include dot files by default', async t => {
     mockFs({
         'source-dir': {
             '.dot-file': 'bla',
@@ -28,12 +28,12 @@ test('should not include dot files by default', async t => {
         includes: ['source-dir/**']
     }, { root: cwd });
 
-    const files = fs.readdirSync('dest-dir/source-dir');
+    const files = fs.readdirSync('./dest-dir/source-dir');
 
-    t.deepEqual(files, ['file-1.txt']);
+    t.deepEqual(files, ['.dot-file', 'file-1.txt']);
 });
 
-test('should include dot file', async t => {
+test('should ignore dot files', async t => {
     mockFs({
         'source-dir': {
             '.dot-file': 'bla',
@@ -44,9 +44,9 @@ test('should include dot file', async t => {
     await writeArtifact({
         dest: 'dest-dir',
         includes: ['source-dir/**']
-    }, { root: cwd, dotFiles: true });
+    }, { root: cwd, dotFiles: false });
 
     const files = fs.readdirSync('dest-dir/source-dir');
 
-    t.deepEqual(files, ['.dot-file', 'file-1.txt']);
+    t.deepEqual(files, ['file-1.txt']);
 });

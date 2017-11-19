@@ -14,13 +14,13 @@ tartifacts
 [test-img]:     https://img.shields.io/travis/blond/tartifacts/master.svg?label=tests
 
 [appveyor]:     https://ci.appveyor.com/project/blond/tartifacts
-[appveyor-img]: http://img.shields.io/appveyor/ci/blond/tartifacts/master.svg?label=windows
+[appveyor-img]: https://img.shields.io/appveyor/ci/blond/tartifacts/master.svg?label=windows
 
 [coveralls]:    https://coveralls.io/r/blond/tartifacts
 [coverage-img]: https://img.shields.io/coveralls/blond/tartifacts/master.svg
 
 [david]:        https://david-dm.org/blond/tartifacts
-[david-img]:    http://img.shields.io/david/blond/tartifacts/master.svg
+[david-img]:    https://img.shields.io/david/blond/tartifacts/master.svg
 
 
 The tool to create artifacts for your assemblies.
@@ -46,23 +46,24 @@ const tartifacts = require('tartifacts');
 
 const artifacts = [
     {
-        dest: 'artifact.tar.gz',
+        name: 'artifact.tar.gz',
         includes: 'sources/**',
         excludes: 'sources/exlib/**'
         tar: true,
         gzip: { level: 1 }
     },
     {
-        dest: 'artifact-dir',
+        name: 'artifact-dir',
         includes: 'sources/**',
         excludes: 'sources/exlib/**'
     },
     {
-        dest: 'artifact-dir',
+        name: 'artifact-dir',
         patterns: [
             'sources/**',
             '!sources/exlib/**'
-        ]
+        ],
+        dotFiles: false // override general options
     }
 ];
 
@@ -72,8 +73,8 @@ tartifacts(artifacts, {
     emptyFiles: true  // include empty files,
     emptyDirs: false  // include empty directories
 })
-.then(() => console.log('Copying or packaging completed!'))
-.catch(err => console.log(err));
+.then(() => console.log('Copying and packaging of artifacts completed!'))
+.catch(console.error);
 ```
 
 CLI
@@ -133,11 +134,20 @@ The info about artifacts.
 
 Each artifact object has the following fields.
 
-#### artifact.dest
+#### artifact.name
 
 Type: `string`
 
-The path to destination file or directory.
+The artifact name of file or directory.
+
+#### artifact.root
+
+Type: `string`
+Default: `precess.cwd()`
+
+The path to root directory.
+
+The `dest`, `name` and `patterns` will be built from root.
 
 #### artifact.patterns
 
@@ -178,37 +188,48 @@ Default: `false`
 
 If `true`, tarball file will be gzipped.
 
-### options
-
-Type: `object`
-
-#### root
+#### artifact.root
 
 Type: `string`
 Default: `precess.cwd()`
 
 The path to root directory.
 
-#### dotFiles
+#### artifact.dotFiles
 
 Type: `boolean`
 Default: `true`
 
 Include dotfiles.
 
-#### emptyFiles
+#### artifact.emptyFiles
 
 Type: `boolean`
 Default: `true`
 
 Include empty files.
 
-#### emptyDirs
+#### artifact.emptyDirs
 
 Type: `boolean`
 Default: `true`
 
 Include empty directories.
+
+### options
+
+Type: `object`
+
+Allows you to configure settings for write artifacts.
+
+The options specify general settings for all artifacts:
+
+ * [root](#artifactroot)
+ * [tar](#artifacttar)
+ * [gzip](#artifactgzip)
+ * [dotFiles](#artifactdotfiles)
+ * [emptyFiles](#artifactemptyfiles)
+ * [emptyDirs](#artifactemptydirs)
 
 License
 -------
