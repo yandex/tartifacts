@@ -11,7 +11,7 @@ const test = require('ava');
 const mockFs = require('mock-fs');
 const streamify = require('stream-array');
 
-const CopyFileStream = require('../../lib/streams/copy-artifact-stream');
+const CopyStream = require('../../lib/streams/copy-stream');
 
 const root = path.resolve('source-dir');
 const dest = path.resolve('dest-dir');
@@ -182,7 +182,7 @@ function copyFiles(filenames, options) {
     return new Promise((resolve, reject) => {
         findFiles(filenames)
             .on('error', reject)
-            .pipe(new CopyFileStream(dest, options))
+            .pipe(new CopyStream(dest, options))
             .on('error', reject)
             .on('finish', resolve);
     });
