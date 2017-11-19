@@ -8,7 +8,7 @@ const promisify = require('es6-promisify');
 const isTar = require('is-tar');
 const isGzip = require('is-gzip');
 
-const writeArtifact = promisify(require('../../lib/write-artifact'));
+const writeArtifact = promisify(require('../../lib/artifacts').write);
 const cwd = process.cwd();
 
 test.afterEach(() => mockFs.restore());

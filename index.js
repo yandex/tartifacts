@@ -1,11 +1,9 @@
 'use strict';
 
-const path = require('path');
-
 const workerFarm = require('worker-farm');
 const each = require('async-each');
 
-const writeArtifact = require('./lib/write-artifact');
+const writeArtifact = require('./lib/artifacts').write;
 
 /**
  * Creates and writes artifacts to fs.
@@ -21,16 +19,6 @@ const writeArtifact = require('./lib/write-artifact');
 module.exports = (artifacts, options) => {
     artifacts || (artifacts = []);
 
-    const defaults = {
-        root: process.cwd(),
-        dotFiles: true,
-        emptyFiles: true,
-        emptyDirs: true
-    };
-    const opts = Object.assign(defaults, options);
-
-    opts.root = path.resolve(opts.root);
-
     if (!Array.isArray(artifacts)) {
         artifacts = [artifacts];
     }
@@ -38,7 +26,7 @@ module.exports = (artifacts, options) => {
     // do not use child processes for one artifact
     if (artifacts.length === 1) {
         return new Promise((resolve, reject) => {
-            writeArtifact(artifacts[0], opts, (err) => {
+            writeArtifact(artifacts[0], options, (err) => {
                 if (err) {
                     return reject(err);
                 }
@@ -51,7 +39,7 @@ module.exports = (artifacts, options) => {
     const writeArtifactWorkers = workerFarm(require.resolve('./lib/write-artifact'));
 
     return new Promise((resolve, reject) => {
-        each(artifacts, (artifact, callback) => writeArtifactWorkers(artifact, opts, callback), (err) => {
+        each(artifacts, (artifact, callback) => writeArtifactWorkers(artifact, options, callback), (err) => {
             workerFarm.end(writeArtifactWorkers);
 
             if (err) {
