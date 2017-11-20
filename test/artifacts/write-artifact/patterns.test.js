@@ -10,7 +10,6 @@ const test = require('ava');
 const mockFs = require('mock-fs');
 
 const writeArtifact = require('../../../lib/artifacts').writeArtifact;
-const cwd = process.cwd();
 
 test.afterEach(() => mockFs.restore());
 
@@ -25,7 +24,7 @@ test('should include files', async t => {
     await writeArtifact({
         dest: 'dest-dir',
         patterns: ['source-dir/**']
-    }, { root: cwd });
+    });
 
     const files = fs.readdirSync('dest-dir/source-dir');
 
@@ -43,7 +42,7 @@ test('should exclude files', async t => {
     await writeArtifact({
         dest: 'dest-dir',
         patterns: ['source-dir/**', '!source-dir/file-2.txt']
-    }, { root: cwd });
+    });
 
     const files = fs.readdirSync('dest-dir/source-dir');
 
@@ -65,7 +64,7 @@ test('should override negative pattern', async t => {
             '!source-dir/file-2.txt',
             'source-dir/file-2.txt'
         ]
-    }, { root: cwd });
+    });
 
     const files = fs.readdirSync('dest-dir/source-dir');
 

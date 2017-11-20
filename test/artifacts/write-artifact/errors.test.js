@@ -5,8 +5,6 @@ const mockFs = require('mock-fs');
 
 const writeArtifact = require('../../../lib/artifacts').writeArtifact;
 
-const cwd = process.cwd();
-
 test.afterEach(() => mockFs.restore());
 
 test('should throw error if include file does not exist', t => {
@@ -15,7 +13,7 @@ test('should throw error if include file does not exist', t => {
     });
 
     t.throws(
-        writeArtifact({ dest: 'dest-dir', includes: 'source-dir/no-file.txt' }, { root: cwd }),
+        writeArtifact({ dest: 'dest-dir', includes: 'source-dir/no-file.txt' }),
         /File not found/
     );
 });

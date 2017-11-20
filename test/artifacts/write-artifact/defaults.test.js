@@ -10,7 +10,6 @@ const test = require('ava');
 const mockFs = require('mock-fs');
 
 const writeArtifact = require('../../../lib/artifacts').writeArtifact;
-const cwd = process.cwd();
 
 test.afterEach(() => mockFs.restore());
 
@@ -22,7 +21,7 @@ test('should copy artifact by default', async t => {
         }
     });
 
-    await writeArtifact({ dest: 'dest-dir', includes: ['source-dir/**'] }, { root: cwd });
+    await writeArtifact({ dest: 'dest-dir', includes: ['source-dir/**'] });
 
     const stats = fs.statSync('dest-dir');
 
