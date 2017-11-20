@@ -4,7 +4,7 @@ const test = require('ava');
 const promisify = require('es6-promisify');
 const mockFs = require('mock-fs');
 
-const writeArtifact = promisify(require('../../../lib/artifacts').write);
+const writeArtifact = promisify(require('../../../lib/artifacts').writeArtifact);
 
 const cwd = process.cwd();
 
