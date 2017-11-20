@@ -77,48 +77,6 @@ tartifacts(artifacts, {
 .catch(console.error);
 ```
 
-CLI
----
-
-```
-Usage
-  $ tartifacts
-
-Options
-  -i, --include   Paths to inlcude files
-  -e, --exclude   Paths to exclude files
-  -p, --patterns  Path to file with include and exclude patterns
-  -d, --dest      Path to destination file
-  -r, --root      Path to root directory
-
-Examples
-  $ tartifacts --include="lib/**" --exclude="node_modules/" --dest="artifact.tar.gz"
-  $ tartifacts --patterns="./path/to/patterns" --dest="artifact.tar.gz"
-```
-
-Patterns
---------
-
-You can write patterns to file.
-
-Use `!` prefix for exclude and `#` for comments.
-
-**Example:**
-
-```
-# include `sources`
-sources/**
-
-# exclude `sources/exlib`
-!sources/exlib/*.{js,css}
-
-# override previous exclude pattern,
-# and include files with `es6.js` extension
-sources/exlib/*.{es6.js}
-```
-
-Read more about patterns in [glob](https://github.com/isaacs/node-glob#glob-primer) package.
-
 API
 ---
 
@@ -156,7 +114,7 @@ Default: `[]`
 
 The paths to files which need to be included or excluded.
 
-Read more about it in [patterns](#patterns) section.
+Read more about patterns in [glob](https://github.com/isaacs/node-glob#glob-primer) package.
 
 #### artifact.includes
 
