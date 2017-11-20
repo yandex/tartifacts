@@ -4,11 +4,10 @@ const fs = require('fs');
 
 const test = require('ava');
 const mockFs = require('mock-fs');
-const promisify = require('es6-promisify');
 const isTar = require('is-tar');
 const isGzip = require('is-gzip');
 
-const writeArtifact = promisify(require('../../../lib/artifacts').writeArtifact);
+const writeArtifact = require('../../../lib/artifacts').writeArtifact;
 const cwd = process.cwd();
 
 test.afterEach(() => mockFs.restore());
