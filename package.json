@@ -44,7 +44,7 @@
     "mock-fs": "^4.4.2",
     "nyc": "^10.0.0",
     "stream-array": "^1.1.2",
-    "tar": "^2.2.1"
+    "tar": "^4.0.2"
   },
   "scripts": {
     "pretest": "eslint .",
