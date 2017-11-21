@@ -17,10 +17,7 @@ test('should include files', async t => {
         }
     });
 
-    await writeArtifact({
-        dest: 'dest-dir',
-        patterns: ['source-dir/**']
-    });
+    await writeArtifact({ dest: 'dest-dir', patterns: ['source-dir/**'] });
 
     const files = fs.readdirSync('dest-dir/source-dir');
 
@@ -35,10 +32,7 @@ test('should exclude files', async t => {
         }
     });
 
-    await writeArtifact({
-        dest: 'dest-dir',
-        patterns: ['source-dir/**', '!source-dir/file-2.txt']
-    });
+    await writeArtifact({ dest: 'dest-dir', patterns: ['source-dir/**', '!source-dir/file-2.txt'] });
 
     const files = fs.readdirSync('dest-dir/source-dir');
 

@@ -17,10 +17,7 @@ test('should include dot files by default', async t => {
         }
     });
 
-    await writeArtifact({
-        dest: 'dest-dir',
-        includes: ['source-dir/**']
-    });
+    await writeArtifact({ dest: 'dest-dir', patterns: 'source-dir/**' });
 
     const files = fs.readdirSync('./dest-dir/source-dir');
 
@@ -35,10 +32,7 @@ test('should ignore dot files', async t => {
         }
     });
 
-    await writeArtifact({
-        dest: 'dest-dir',
-        includes: ['source-dir/**']
-    }, { dotFiles: false });
+    await writeArtifact({ dest: 'dest-dir', patterns: 'source-dir/**' }, { dotFiles: false });
 
     const files = fs.readdirSync('dest-dir/source-dir');
 

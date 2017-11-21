@@ -22,7 +22,8 @@ test('should create artifact', async t => {
         'source-dir': {}
     });
 
-    await writeArtifacts({ dest: 'dest-dir', patterns: ['source-dir/'] });
+    await writeArtifacts({ dest: 'dest-dir', patterns: 'source-dir/' });
+
     const files = fs.readdirSync('dest-dir');
 
     t.deepEqual(files, ['source-dir']);
@@ -35,9 +36,10 @@ test('should create artifacts', async t => {
     });
 
     await writeArtifacts([
-        { dest: 'dest-dir1', patterns: ['source-dir1/'] },
-        { dest: 'dest-dir2', patterns: ['source-dir2/'] }
+        { dest: 'dest-dir1', patterns: 'source-dir1/' },
+        { dest: 'dest-dir2', patterns: 'source-dir2/' }
     ]);
+
     const files1 = fs.readdirSync('dest-dir1');
     const files2 = fs.readdirSync('dest-dir2');
 
@@ -58,8 +60,8 @@ test('should create artifacts consider options', async t => {
     });
 
     await writeArtifacts([
-        { dest: 'dest-dir1', patterns: ['source-dir1/**'] },
-        { dest: 'dest-dir2', patterns: ['source-dir2/**'] }
+        { dest: 'dest-dir1', patterns: 'source-dir1/**' },
+        { dest: 'dest-dir2', patterns: 'source-dir2/**' }
     ], { dotFiles: false });
 
     const files1 = fs.readdirSync('./dest-dir1/source-dir1');
