@@ -7,11 +7,9 @@ process.env.UNLAZY = true;
 const fs = require('fs');
 
 const test = require('ava');
-const promisify = require('es6-promisify');
 const mockFs = require('mock-fs');
 
-const writeArtifact = promisify(require('../../../lib/artifacts').write);
-const cwd = process.cwd();
+const writeArtifact = require('../../../lib/artifacts').writeArtifact;
 
 test.afterEach(() => mockFs.restore());
 
@@ -26,7 +24,7 @@ test('should include files', async t => {
     await writeArtifact({
         dest: 'dest-dir',
         patterns: ['source-dir/**']
-    }, { root: cwd });
+    });
 
     const files = fs.readdirSync('dest-dir/source-dir');
 
@@ -44,7 +42,7 @@ test('should exclude files', async t => {
     await writeArtifact({
         dest: 'dest-dir',
         patterns: ['source-dir/**', '!source-dir/file-2.txt']
-    }, { root: cwd });
+    });
 
     const files = fs.readdirSync('dest-dir/source-dir');
 
@@ -66,7 +64,7 @@ test('should override negative pattern', async t => {
             '!source-dir/file-2.txt',
             'source-dir/file-2.txt'
         ]
-    }, { root: cwd });
+    });
 
     const files = fs.readdirSync('dest-dir/source-dir');
 

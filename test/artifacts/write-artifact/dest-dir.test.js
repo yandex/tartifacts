@@ -3,11 +3,9 @@
 const fs = require('fs');
 
 const test = require('ava');
-const promisify = require('es6-promisify');
 const mockFs = require('mock-fs');
 
-const writeArtifact = promisify(require('../../../lib/artifacts').write);
-const cwd = process.cwd();
+const writeArtifact = require('../../../lib/artifacts').writeArtifact;
 
 test.afterEach(() => mockFs.restore());
 
@@ -16,7 +14,7 @@ test('should create dest dir', async t => {
         'source-dir': {}
     });
 
-    await writeArtifact({ dest: 'dest-dir', includes: ['source-dir/'] }, { root: cwd, emptyDirs: true });
+    await writeArtifact({ dest: 'dest-dir', includes: ['source-dir/'] }, { emptyDirs: true });
     const files = fs.readdirSync('dest-dir');
 
     t.deepEqual(files, ['source-dir']);
@@ -42,7 +40,7 @@ test('should create dir by depth path', async t => {
         'source-dir': {}
     });
 
-    await writeArtifact({ dest: './path/to/dest-dir/', includes: ['source-dir/'] }, { root: cwd, emptyDirs: true });
+    await writeArtifact({ dest: './path/to/dest-dir/', includes: ['source-dir/'] }, { emptyDirs: true });
     const stats = fs.statSync('./path/to/dest-dir/');
 
     t.true(stats.isDirectory());

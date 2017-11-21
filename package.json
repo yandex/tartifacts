@@ -16,9 +16,6 @@
     "copy",
     "files"
   ],
-  "bin": {
-    "tartifacts": "bin/tartifacts"
-  },
   "main": "index.js",
   "files": [
     "bin/**",
@@ -30,17 +27,12 @@
   },
   "dependencies": {
     "archiver": "1.3.0",
-    "async-each": "1.0.1",
     "cp-file": "5.0.0",
-    "es6-promisify": "5.0.0",
     "glob": "7.1.2",
     "glob-stream": "6.1.0",
     "graceful-fs": "4.1.11",
     "make-dir": "1.1.0",
-    "meow": "3.7.0",
-    "node-file-eval": "1.0.0",
-    "proxyquire": "1.7.11",
-    "worker-farm": "1.3.1"
+    "proxyquire": "1.7.11"
   },
   "devDependencies": {
     "ava": "^0.18.2",
