@@ -14,7 +14,7 @@ test('should create dest dir by dest', async t => {
         'source-dir': {}
     });
 
-    await writeArtifact({ dest: 'dest-dir', patterns: ['source-dir/'] }, { emptyDirs: true });
+    await writeArtifact({ dest: 'dest-dir', patterns: ['source-dir/'] });
 
     const files = fs.readdirSync('dest-dir');
 
@@ -26,10 +26,7 @@ test('should create dest dir from root', async t => {
         '/root/source-dir': {}
     });
 
-    await writeArtifact({ dest: 'dest-dir', patterns: ['source-dir/'] }, {
-        root: '/root',
-        emptyDirs: true
-    });
+    await writeArtifact({ root: '/root', dest: 'dest-dir', patterns: ['source-dir/'] });
 
     const stats = fs.statSync('/root/dest-dir/');
 
@@ -41,7 +38,7 @@ test('should create dir by depth path', async t => {
         'source-dir': {}
     });
 
-    await writeArtifact({ dest: './path/to/dest-dir/', patterns: 'source-dir/' }, { emptyDirs: true });
+    await writeArtifact({ dest: './path/to/dest-dir/', patterns: 'source-dir/' });
 
     const stats = fs.statSync('./path/to/dest-dir/');
 
