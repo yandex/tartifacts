@@ -1,6 +1,5 @@
 'use strict';
 
-const fs = require('fs');
 const path = require('path');
 
 const test = require('ava');
@@ -25,9 +24,10 @@ test('should create tarball with files', async t => {
     });
 
     await packFiles(['file-1.txt', 'file-2.txt']);
-    const files = await extractFiles();
 
-    t.deepEqual(files, ['file-1.txt', 'file-2.txt']);
+    const files = await parseFiles();
+
+    t.deepEqual(files.map(file => file.path), ['file-1.txt', 'file-2.txt']);
 });
 
 test('should take into account contents of file', async t => {
@@ -38,11 +38,10 @@ test('should take into account contents of file', async t => {
     });
 
     await packFiles(['file-1.txt']);
-    await extractFiles(resdir);
 
-    const str = fs.readFileSync(path.join(resdir, 'file-1.txt'), 'utf-8');
+    const files = await parseFiles();
 
-    t.is(str, 'Hi!');
+    t.deepEqual(files, [{ path: 'file-1.txt', contents: 'Hi!' }]);
 });
 
 test('should create tarball with subdirs', async t => {
@@ -56,9 +55,10 @@ test('should create tarball with subdirs', async t => {
     });
 
     await packFiles(['sub-dir/file-1.txt', 'sub-dir/file-2.txt']);
-    const files = await extractFiles();
 
-    t.deepEqual(files, ['sub-dir/file-1.txt', 'sub-dir/file-2.txt']);
+    const files = await parseFiles();
+
+    t.deepEqual(files.map(file => file.path), ['sub-dir/file-1.txt', 'sub-dir/file-2.txt']);
 });
 
 test('should include directory without files', async t => {
@@ -69,9 +69,10 @@ test('should include directory without files', async t => {
     });
 
     await packFiles(['sub-dir/']);
-    const files = await extractFiles();
 
-    t.deepEqual(files, ['sub-dir/']);
+    const files = await parseFiles();
+
+    t.deepEqual(files.map(file => file.path), ['sub-dir/']);
 });
 
 test('should ignore directory without files', async t => {
@@ -82,9 +83,10 @@ test('should ignore directory without files', async t => {
     });
 
     await packFiles(['sub-dir/'], { emptyDirs: false });
-    const files = await extractFiles();
 
-    t.deepEqual(files, []);
+    const files = await parseFiles();
+
+    t.deepEqual(files.map(file => file.path), []);
 });
 
 test('should take into account symlink', async t => {
@@ -98,12 +100,10 @@ test('should take into account symlink', async t => {
     });
 
     await packFiles(['symlink.txt']);
-    await extractFiles(resdir);
-    fs.unlinkSync('./file-1.txt');
 
-    const str = fs.readFileSync(path.join(resdir, 'symlink.txt'), 'utf-8');
+    const files = await parseFiles(resdir);
 
-    t.deepEqual(str, 'Hi!');
+    t.deepEqual(files, [{ path: 'symlink.txt', contents: 'Hi!' }]);
 });
 
 test('should ignore broken symlinks', async t => {
@@ -117,9 +117,10 @@ test('should ignore broken symlinks', async t => {
     });
 
     await packFiles(['file-1.txt', 'symlink.txt']);
-    const files = await extractFiles();
 
-    t.deepEqual(files, ['file-1.txt']);
+    const files = await parseFiles();
+
+    t.deepEqual(files.map(file => file.path), ['file-1.txt']);
 });
 
 test('should include empty file', async t => {
@@ -131,9 +132,10 @@ test('should include empty file', async t => {
     });
 
     await packFiles(['empty-file.txt', 'file-1.txt']);
-    const files = await extractFiles();
 
-    t.deepEqual(files, ['empty-file.txt', 'file-1.txt']);
+    const files = await parseFiles();
+
+    t.deepEqual(files.map(file => file.path), ['empty-file.txt', 'file-1.txt']);
 });
 
 test('should ignore empty file', async t => {
@@ -145,9 +147,10 @@ test('should ignore empty file', async t => {
     });
 
     await packFiles(['empty-file.txt', 'file-1.txt'], { emptyFiles: false });
-    const files = await extractFiles();
 
-    t.deepEqual(files, ['file-1.txt']);
+    const files = await parseFiles();
+
+    t.deepEqual(files.map(file => file.path), ['file-1.txt']);
 });
 
 test('should emit error if file file does not exist', t => {
@@ -168,19 +171,21 @@ function packFiles(filenames, options) {
     });
 }
 
-function extractFiles(dir) {
+function parseFiles() {
     const files = [];
 
-    return new Promise((resolve, reject) => {
-        const rs = fs.createReadStream(dest).on('error', reject);
-        const ws = dir
-            ? tar.Extract({ path: dir })
-            : tar.Parse().on("entry", entry => files.push(entry.props.path));
-
-        rs.pipe(ws)
-            .on('error', reject)
-            .on('end', () => resolve(files));
-    });
+    return tar.list({
+        file: dest,
+        onentry: entry => {
+            if (entry.size === 0) {
+                files.push({ path: entry.path, contents: null });
+            } else {
+                entry.on('data', buf => {
+                    files.push({ path: entry.path, contents: buf.toString('utf-8') })
+                });
+            }
+        }
+    }).then(() => files);
 }
 
 function findFiles(filenames) {
