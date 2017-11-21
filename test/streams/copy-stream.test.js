@@ -1,9 +1,5 @@
 'use strict';
 
-// Immediately invoke all dependencies,
-// because of the `copy` module use `lazy-cache` (it can't work with `mock-fs`).
-process.env.UNLAZY = true;
-
 const fs = require('fs');
 const path = require('path');
 
