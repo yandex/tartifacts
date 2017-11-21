@@ -33,7 +33,7 @@ test('should create dest dir by dest', async t => {
     t.deepEqual(files, ['source-dir']);
 });
 
-test('should create dest dir from root', async t => {
+test('should create dest dir from relative root', async t => {
     mockFs({
         '/root/source-dir': {}
     });
