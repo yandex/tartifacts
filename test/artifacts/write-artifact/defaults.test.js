@@ -1,9 +1,5 @@
 'use strict';
 
-// Immediately invoke all dependencies,
-// because of the `copy` module use `lazy-cache` (it can't work with `mock-fs`).
-process.env.UNLAZY = true;
-
 const fs = require('fs');
 
 const test = require('ava');
@@ -21,7 +17,7 @@ test('should copy artifact by default', async t => {
         }
     });
 
-    await writeArtifact({ dest: 'dest-dir', includes: ['source-dir/**'] });
+    await writeArtifact({ dest: 'dest-dir', patterns: 'source-dir/**' });
 
     const stats = fs.statSync('dest-dir');
 

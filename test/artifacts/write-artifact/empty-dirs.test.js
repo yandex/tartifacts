@@ -9,10 +9,10 @@ const writeArtifact = require('../../../lib/artifacts').writeArtifact;
 
 test.afterEach(() => mockFs.restore());
 
-test('should include dot files by default', async t => {
+test('should include empty dirs by default', async t => {
     mockFs({
         'source-dir': {
-            '.dot-file': 'bla',
+            'empty-dir': {},
             'file-1.txt': 'Hi!'
         }
     });
@@ -21,18 +21,18 @@ test('should include dot files by default', async t => {
 
     const files = fs.readdirSync('./dest-dir/source-dir');
 
-    t.deepEqual(files, ['.dot-file', 'file-1.txt']);
+    t.deepEqual(files, ['empty-dir', 'file-1.txt']);
 });
 
-test('should ignore dot files', async t => {
+test('should ignore empty dirs', async t => {
     mockFs({
         'source-dir': {
-            '.dot-file': 'bla',
+            'empty-dir': {},
             'file-1.txt': 'Hi!'
         }
     });
 
-    await writeArtifact({ dest: 'dest-dir', patterns: 'source-dir/**' }, { dotFiles: false });
+    await writeArtifact({ dest: 'dest-dir', patterns: 'source-dir/**' }, { emptyDirs: false });
 
     const files = fs.readdirSync('dest-dir/source-dir');
 
