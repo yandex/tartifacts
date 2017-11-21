@@ -17,9 +17,9 @@ test('should include empty dirs by default', async t => {
         }
     });
 
-    await writeArtifact({ dest: 'dest-dir', patterns: 'source-dir/**' });
+    await writeArtifact({ name: 'artifact-dir', patterns: 'source-dir/**' });
 
-    const files = fs.readdirSync('./dest-dir/source-dir');
+    const files = fs.readdirSync('./artifact-dir/source-dir');
 
     t.deepEqual(files, ['empty-dir', 'file-1.txt']);
 });
@@ -32,9 +32,9 @@ test('should ignore empty dirs', async t => {
         }
     });
 
-    await writeArtifact({ dest: 'dest-dir', patterns: 'source-dir/**' }, { emptyDirs: false });
+    await writeArtifact({ name: 'artifact-dir', patterns: 'source-dir/**' }, { emptyDirs: false });
 
-    const files = fs.readdirSync('dest-dir/source-dir');
+    const files = fs.readdirSync('artifact-dir/source-dir');
 
     t.deepEqual(files, ['file-1.txt']);
 });
