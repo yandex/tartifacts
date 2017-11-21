@@ -13,7 +13,7 @@ test('should throw error if include file does not exist', t => {
     });
 
     t.throws(
-        writeArtifact({ dest: 'dest-dir', patterns: 'source-dir/no-file.txt' }),
+        writeArtifact({ name: 'artifact-dir', patterns: 'source-dir/no-file.txt' }),
         /File not found/
     );
 });

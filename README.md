@@ -42,36 +42,29 @@ Usage
 -----
 
 ```js
-const tartifacts = require('tartifacts');
-
+const writeArtifacts = require('tartifacts');
 const artifacts = [
     {
         name: 'artifact.tar.gz',
-        includes: 'sources/**',
-        excludes: 'sources/exlib/**'
+        patterns: ['sources/**', '!sources/exlib/**'],
         tar: true,
-        gzip: { level: 1 }
+        gzip: { level: 9 }
     },
     {
         name: 'artifact-dir',
         includes: 'sources/**',
-        excludes: 'sources/exlib/**'
-    },
-    {
-        name: 'artifact-dir',
-        patterns: [
-            'sources/**',
-            '!sources/exlib/**'
-        ],
-        dotFiles: false // override general options
+        excludes: 'sources/exlib/**',
+        dotFiles: false // exclude dotfiles, override general settings
     }
 ];
 
-tartifacts(artifacts, {
-    root: __dirname,  // `process.cwd()` by default
+writeArtifacts(artifacts, {
+    root: './path/to/my-project/', // files of artifacts will be searched from root by artifact patterns,
+                                   // for example: ./path/to/my-project/sources/**
+    destDir: './dest/',
     dotFiles: true,   // include dotfiles
-    emptyFiles: true  // include empty files,
-    emptyDirs: false  // include empty directories
+    emptyFiles: true  // include empty files
+    emptyDirs: true   // include empty directories
 })
 .then(() => console.log('Copying and packaging of artifacts completed!'))
 .catch(console.error);
@@ -80,17 +73,29 @@ tartifacts(artifacts, {
 API
 ---
 
-### tartifacts(artifacts, [options])
+### writeArtifacts(artifacts, [options])
 
-Creates artifacts and writes them to fs.
+Search files of artifact by glob patterns and writes them to artifact in fs.
 
 ### artifacts
 
-Type: `object[]`
+Type: `object`, `object[]`
 
-The info about artifacts.
+The info about artifacts or one artifact.
 
-Each artifact object has the following fields.
+Each artifact object has the following fields:
+
+* [name](#artifactname)
+* [root](#artifactroot)
+* [destDir](#artifactdestdir)
+* [patterns](#artifactpatterns)
+* [includes](#artifactincludes)
+* [excludes](#artifactexcludes)
+* [tar](#artifacttar)
+* [gzip](#artifactgzip)
+* [dotFiles](#artifactdotfiles)
+* [emptyFiles](#artifactemptyfiles)
+* [emptyDirs](#artifactemptydirs)
 
 #### artifact.name
 
@@ -101,15 +106,25 @@ The artifact name of file or directory.
 #### artifact.root
 
 Type: `string`
+
 Default: `precess.cwd()`
 
 The path to root directory.
 
-The `dest`, `name` and `patterns` will be built from root.
+The `patterns`, `includes` and `excludes` will be resolved from `root`.
+
+#### artifact.destDir
+
+Type: `string`
+
+The path to destination directory of artifact.
+
+The `dest` and `name` will be resolved from `destDir`. If `destDir` is not specified, `dest` and `name` will be resolved from `root`.
 
 #### artifact.patterns
 
-Type: `string[]`
+Type: `string`, `string[]`
+
 Default: `[]`
 
 The paths to files which need to be included or excluded.
@@ -118,14 +133,16 @@ Read more about patterns in [glob](https://github.com/isaacs/node-glob#glob-prim
 
 #### artifact.includes
 
-Type: `string[]`
+Type: `string`, `string[]`
+
 Default: `[]`
 
 The paths to files which need to be included.
 
 #### artifact.excludes
 
-Type: `string[]`
+Type: `string`, `string[]`
+
 Default: `[]`
 
 The paths to files which need to be excluded.
@@ -133,6 +150,7 @@ The paths to files which need to be excluded.
 #### artifact.tar
 
 Type: `boolean`
+
 Default: `false`
 
 If `true`, destination directory will be packed to tarball file.
@@ -142,20 +160,17 @@ Otherwise files of artifact will be copied to destination directory.
 #### artifact.gzip
 
 Type: `boolean`, `object`
+
 Default: `false`
 
 If `true`, tarball file will be gzipped.
 
-#### artifact.root
-
-Type: `string`
-Default: `precess.cwd()`
-
-The path to root directory.
+To change the compression level pass object with `level` field.
 
 #### artifact.dotFiles
 
 Type: `boolean`
+
 Default: `true`
 
 Include dotfiles.
@@ -163,6 +178,7 @@ Include dotfiles.
 #### artifact.emptyFiles
 
 Type: `boolean`
+
 Default: `true`
 
 Include empty files.
@@ -170,6 +186,7 @@ Include empty files.
 #### artifact.emptyDirs
 
 Type: `boolean`
+
 Default: `true`
 
 Include empty directories.
@@ -183,6 +200,7 @@ Allows you to configure settings for write artifacts.
 The options specify general settings for all artifacts:
 
  * [root](#artifactroot)
+ * [destDir](#artifactdestdir)
  * [tar](#artifacttar)
  * [gzip](#artifactgzip)
  * [dotFiles](#artifactdotfiles)

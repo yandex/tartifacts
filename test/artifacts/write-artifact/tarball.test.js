@@ -19,15 +19,11 @@ test('should pack to tarball', async t => {
         }
     });
 
-    await writeArtifact({
-        dest: 'dest-file',
-        includes: 'source-dir/**',
-        tar: true
-    });
+    await writeArtifact({ name: 'artifact.tar', patterns: 'source-dir/**' }, { tar: true });
 
-    const tarball = fs.readFileSync('dest-file');
+    const archive = fs.readFileSync('artifact.tar');
 
-    t.true(isTar(tarball));
+    t.true(isTar(archive));
 });
 
 test('should pack to tarball with gzip', async t => {
@@ -38,16 +34,11 @@ test('should pack to tarball with gzip', async t => {
         }
     });
 
-    await writeArtifact({
-        dest: 'dest-file',
-        includes: 'source-dir/**',
-        tar: true,
-        gzip: true
-    });
+    await writeArtifact({ name: 'artifact.tar.gz', patterns: 'source-dir/**'}, { tar: true, gzip: true });
 
-    const gz = fs.readFileSync('dest-file');
+    const archive = fs.readFileSync('artifact.tar.gz');
 
-    t.true(isGzip(gz));
+    t.true(isGzip(archive));
 });
 
 test('should pack to tarball with gzip using gzip options', async t => {
@@ -58,14 +49,9 @@ test('should pack to tarball with gzip using gzip options', async t => {
         }
     });
 
-    await writeArtifact({
-        dest: 'dest-file',
-        includes: 'source-dir/**',
-        tar: true,
-        gzip: { level: 1 }
-    });
+    await writeArtifact({ name: 'artifact.tar.gz', patterns: 'source-dir/**' }, { tar: true, gzip: { level: 1 } });
 
-    const gz = fs.readFileSync('dest-file');
+    const gz = fs.readFileSync('artifact.tar.gz');
 
     t.true(isGzip(gz));
 });

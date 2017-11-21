@@ -4,6 +4,12 @@ const test = require('ava');
 
 const ArtifactTask = require('../../../lib/artifacts').ArtifactTask;
 
+test('should throw error if artifact info is not specified', t => {
+    t.throws(
+        () => new ArtifactTask()
+    );
+});
+
 test('should throw error if dest path is not specified', t => {
     t.throws(
         () => new ArtifactTask({ patterns: ['lib/**'] }),

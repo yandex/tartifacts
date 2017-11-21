@@ -17,9 +17,9 @@ test('should include files', async t => {
         }
     });
 
-    await writeArtifact({ dest: 'dest-dir', patterns: ['source-dir/**'] });
+    await writeArtifact({ name: 'artifact-dir', patterns: ['source-dir/**'] });
 
-    const files = fs.readdirSync('dest-dir/source-dir');
+    const files = fs.readdirSync('artifact-dir/source-dir');
 
     t.deepEqual(files, ['file-1.txt', 'file-2.txt']);
 });
@@ -32,9 +32,9 @@ test('should exclude files', async t => {
         }
     });
 
-    await writeArtifact({ dest: 'dest-dir', patterns: ['source-dir/**', '!source-dir/file-2.txt'] });
+    await writeArtifact({ name: 'artifact-dir', patterns: ['source-dir/**', '!source-dir/file-2.txt'] });
 
-    const files = fs.readdirSync('dest-dir/source-dir');
+    const files = fs.readdirSync('artifact-dir/source-dir');
 
     t.deepEqual(files, ['file-1.txt']);
 });
@@ -48,7 +48,7 @@ test('should override negative pattern', async t => {
     });
 
     await writeArtifact({
-        dest: 'dest-dir',
+        name: 'artifact-dir',
         patterns: [
             'source-dir/**',
             '!source-dir/file-2.txt',
@@ -56,7 +56,7 @@ test('should override negative pattern', async t => {
         ]
     });
 
-    const files = fs.readdirSync('dest-dir/source-dir');
+    const files = fs.readdirSync('artifact-dir/source-dir');
 
     t.deepEqual(files, ['file-1.txt', 'file-2.txt']);
 });

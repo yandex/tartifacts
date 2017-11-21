@@ -17,9 +17,9 @@ test('should copy artifact by default', async t => {
         }
     });
 
-    await writeArtifact({ dest: 'dest-dir', patterns: 'source-dir/**' });
+    await writeArtifact({ name: 'artifact-dir', patterns: 'source-dir/**' });
 
-    const stats = fs.statSync('dest-dir');
+    const stats = fs.statSync('artifact-dir');
 
     t.true(stats.isDirectory());
 });
