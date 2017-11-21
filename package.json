@@ -32,7 +32,7 @@
     "glob-stream": "6.1.0",
     "graceful-fs": "4.1.11",
     "make-dir": "1.1.0",
-    "proxyquire": "1.7.11"
+    "proxyquire": "1.8.0"
   },
   "devDependencies": {
     "ava": "^0.18.2",
