@@ -35,6 +35,12 @@ test('should create tar.gz artifact with gzip options', t => {
     t.deepEqual(task.settings.gzipOptions, { level: 10 });
 });
 
+test('should create task with follow symlinks', t => {
+    const task = createTask({ followSymlinks: true });
+
+    t.true(task.settings.followSymlinks);
+});
+
 test('should create task with dot files', t => {
     const task = createTask({ dotFiles: true });
 
@@ -51,6 +57,12 @@ test('should create task with empty dirs', t => {
     const task = createTask({ emptyDirs: true });
 
     t.true(task.settings.emptyDirs);
+});
+
+test('should create task without follow symlinks', t => {
+    const task = createTask({ followSymlinks: false });
+
+    t.false(task.settings.followSymlinks);
 });
 
 test('should create task without dot files', t => {

@@ -31,6 +31,7 @@
     "glob-stream": "6.1.0",
     "graceful-fs": "4.1.11",
     "make-dir": "1.1.0",
+    "pify": "3.0.0",
     "proxyquire": "1.8.0"
   },
   "devDependencies": {

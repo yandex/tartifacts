@@ -101,39 +101,56 @@ test('should ignore directory without files', async t => {
     t.deepEqual(files, ['file-1.txt']);
 });
 
-test('should copy source file of symlink', async t => {
+test('should copy symlink to file', async t => {
     mockFs({
         'file-1.txt': 'Hi!',
         'source-dir': {
             'symlink.txt': mockFs.symlink({
-                path: '../file-1.txt'
+                path: path.join('..', 'file-1.txt')
             })
         }
     });
 
     await copyFiles(['symlink.txt']);
-    fs.unlinkSync('./file-1.txt');
 
-    const str = fs.readFileSync(path.join(dest, 'symlink.txt'), 'utf-8');
+    const link = fs.readlinkSync(path.join(dest, 'symlink.txt'));
 
-    t.deepEqual(str, 'Hi!');
+    t.is(link, path.join('..', 'file-1.txt'));
 });
 
-test('should ignore broken symlinks', async t => {
+test('should copy symlink to dir', async t => {
+    mockFs({
+        'dir': {
+            'file-1.txt': 'Hi!'
+        },
+        'source-dir': {
+            'symdir': mockFs.symlink({
+                path: path.join('..', 'dir')
+            })
+        }
+    });
+
+    await copyFiles(['symdir']);
+
+    const link = fs.readlinkSync(path.join(dest, 'symdir'));
+
+    t.is(link, path.join('..', 'dir'));
+});
+
+test('should copy broken symlinks', async t => {
     mockFs({
         'source-dir': {
-            'file-1.txt': 'Hi!',
             'symlink.txt': mockFs.symlink({
                 path: 'no-file'
             })
         }
     });
 
-    await copyFiles(['file-1.txt', 'symlink.txt']);
+    await copyFiles(['symlink.txt']);
 
-    const files = fs.readdirSync(path.join(dest));
+    const link = fs.readlinkSync(path.join(dest, 'symlink.txt'));
 
-    t.deepEqual(files, ['file-1.txt']);
+    t.is(link, 'no-file');
 });
 
 test('should copy empty file', async t => {

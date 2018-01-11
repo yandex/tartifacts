@@ -29,6 +29,12 @@ test('should use gzip options', t => {
     t.deepEqual(task.settings.gzipOptions, { level: 10 });
 });
 
+test('should override followSymlinks setting', t => {
+    const task = new ArtifactTask(createArtifact({ followSymlinks: false }), { followSymlinks: true });
+
+    t.false(task.settings.followSymlinks);
+});
+
 test('should override dotFiles setting', t => {
     const task = new ArtifactTask(createArtifact({ dotFiles: true }), { dotFiles: false });
 

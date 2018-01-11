@@ -167,6 +167,16 @@ If `true`, tarball file will be gzipped.
 
 To change the compression level pass object with `level` field.
 
+#### artifact.followSymlinks
+
+Type: `boolean`
+
+Default: `false`
+
+Follow symlinked files and directories.
+
+*Note that this can result in a lot of duplicate references in the presence of cyclic links.*
+
 #### artifact.dotFiles
 
 Type: `boolean`
