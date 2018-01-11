@@ -89,7 +89,7 @@ test('should ignore directory without files', async t => {
     t.deepEqual(files.map(file => file.path), []);
 });
 
-test('should take into account symlink', async t => {
+test('should take into account symlink to file', async t => {
     mockFs({
         'file-1.txt': 'Hi!',
         'source-dir': {
@@ -103,24 +103,43 @@ test('should take into account symlink', async t => {
 
     const files = await parseFiles(resdir);
 
-    t.deepEqual(files, [{ path: 'symlink.txt', contents: 'Hi!' }]);
+    t.deepEqual(files, [{ path: 'symlink.txt', contents: null, linkpath: '../file-1.txt' }]);
 });
 
-test('should ignore broken symlinks', async t => {
+test('should take into account symlink to dir', async t => {
     mockFs({
+        'dir': {
+            'file-1.txt': 'Hi!'
+        },
         'source-dir': {
-            'file-1.txt': 'Hi!',
+            'symdir': mockFs.symlink({
+                path: '../dir'
+            })
+        }
+    });
+
+    await packFiles(['symdir']);
+
+    const files = await parseFiles(resdir);
+
+    t.deepEqual(files, [{ path: 'symdir', contents: null, linkpath: '../dir' }]);
+});
+
+test('should take into broken symlinks', async t => {
+    mockFs({
+        'file-1.txt': 'Hi!',
+        'source-dir': {
             'symlink.txt': mockFs.symlink({
                 path: '../no-file'
             })
         }
     });
 
-    await packFiles(['file-1.txt', 'symlink.txt']);
+    await packFiles(['symlink.txt']);
 
     const files = await parseFiles();
 
-    t.deepEqual(files.map(file => file.path), ['file-1.txt']);
+    t.deepEqual(files, [{ path: 'symlink.txt', contents: null, linkpath: '../no-file' }]);
 });
 
 test('should include empty file', async t => {
@@ -178,7 +197,7 @@ function parseFiles() {
         file: dest,
         onentry: entry => {
             if (entry.size === 0) {
-                files.push({ path: entry.path, contents: null });
+                files.push({ path: entry.path, contents: null, linkpath: entry.linkpath });
             } else {
                 entry.on('data', buf => {
                     files.push({ path: entry.path, contents: buf.toString('utf-8') })
