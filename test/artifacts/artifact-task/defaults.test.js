@@ -23,6 +23,7 @@ test('should create artifact with default options', t => {
         gzip: false,
         gzipOptions: { level: 1 },
 
+        followSymlinks: false,
         dotFiles: true,
         emptyFiles: true,
         emptyDirs: true
