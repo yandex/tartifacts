@@ -106,7 +106,7 @@ test('should take into account symlink to file', async t => {
     t.deepEqual(files, [{ path: 'symlink.txt', contents: null, linkpath: '../file-1.txt' }]);
 });
 
-test('should take into account symlink to dir', async t => {
+test('should take into account symlink to dir if emptyDirs is true', async t => {
     mockFs({
         'dir': {
             'file-1.txt': 'Hi!'
@@ -118,7 +118,26 @@ test('should take into account symlink to dir', async t => {
         }
     });
 
-    await packFiles(['symdir']);
+    await packFiles(['symdir/'], { emptyDirs: true });
+
+    const files = await parseFiles(resdir);
+
+    t.deepEqual(files, [{ path: 'symdir', contents: null, linkpath: '../dir' }]);
+});
+
+test('should take into account symlink to dir if emptyDirs is false', async t => {
+    mockFs({
+        'dir': {
+            'file-1.txt': 'Hi!'
+        },
+        'source-dir': {
+            'symdir': mockFs.symlink({
+                path: '../dir'
+            })
+        }
+    });
+
+    await packFiles(['symdir/'], { emptyDirs: false });
 
     const files = await parseFiles(resdir);
 

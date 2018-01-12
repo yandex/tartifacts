@@ -118,7 +118,7 @@ test('should copy symlink to file', async t => {
     t.is(link, path.join('..', 'file-1.txt'));
 });
 
-test('should copy symlink to dir', async t => {
+test('should copy symlink to dir if emptyDirs is false', async t => {
     mockFs({
         'dir': {
             'file-1.txt': 'Hi!'
@@ -130,7 +130,26 @@ test('should copy symlink to dir', async t => {
         }
     });
 
-    await copyFiles(['symdir']);
+    await copyFiles(['symdir/'], { emptyDirs: false });
+
+    const link = fs.readlinkSync(path.join(dest, 'symdir'));
+
+    t.is(link, path.join('..', 'dir'));
+});
+
+test('should copy symlink to dir if emptyDirs is true', async t => {
+    mockFs({
+        'dir': {
+            'file-1.txt': 'Hi!'
+        },
+        'source-dir': {
+            'symdir': mockFs.symlink({
+                path: path.join('..', 'dir')
+            })
+        }
+    });
+
+    await copyFiles(['symdir/'], { emptyDirs: true });
 
     const link = fs.readlinkSync(path.join(dest, 'symdir'));
 
