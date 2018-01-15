@@ -25,7 +25,7 @@
     "node": ">= 4.0"
   },
   "dependencies": {
-    "archiver": "2.1.0",
+    "archiver": "2.1.1",
     "cp-file": "5.0.0",
     "glob": "7.1.2",
     "glob-stream": "6.1.0",
@@ -35,14 +35,14 @@
     "proxyquire": "1.8.0"
   },
   "devDependencies": {
-    "ava": "^0.18.2",
+    "ava": "^0.18.0",
     "coveralls": "^3.0.0",
     "eslint": "^4.11.0",
     "eslint-config-pedant": "^1.0.0",
     "is-gzip": "^2.0.0",
     "is-tar": "^1.0.0",
     "mock-fs": "^4.4.2",
-    "nyc": "^10.0.0",
+    "nyc": "^11.4.1",
     "stream-array": "^1.1.2",
     "tar": "^4.0.2"
   },
