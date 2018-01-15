@@ -61,5 +61,10 @@
     "sources": [
       "lib/**/*.js"
     ]
+  },
+  "greenkeeper": {
+    "ignore": [
+      "ava"
+    ]
   }
 }
