@@ -161,6 +161,23 @@ test('should take into broken symlinks', async t => {
     t.deepEqual(files, [{ path: 'symlink.txt', contents: null, linkpath: '../no-file' }]);
 });
 
+test('should follow symlink', async t => {
+    mockFs({
+        'file-1.txt': 'Hi!',
+        'source-dir': {
+            'symlink.txt': mockFs.symlink({
+                path: '../file-1.txt'
+            })
+        }
+    });
+
+    await packFiles(['symlink.txt'], { followSymlinks: true });
+
+    const files = await parseFiles(resdir);
+
+    t.deepEqual(files, [{ path: 'symlink.txt', contents: 'Hi!' }]);
+});
+
 test('should include empty file', async t => {
     mockFs({
         'source-dir': {
