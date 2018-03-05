@@ -1,11 +1,14 @@
 'use strict';
 
 const path = require('path');
+const os = require('os');
 
 const test = require('ava');
 const mockFs = require('mock-fs');
 const streamify = require('stream-array');
 const tar = require('tar');
+
+const unixOnly = os.platform() !== 'win32';
 
 const TarStream = require('../../lib/streams').TarStream;
 
@@ -41,7 +44,7 @@ test('should take into account contents of file', async t => {
 
     const files = await parseFiles();
 
-    t.deepEqual(files, [{ path: 'file-1.txt', contents: 'Hi!' }]);
+    t.deepEqual(files.map(file => file.contents), ['Hi!']);
 });
 
 test('should create tarball with subdirs', async t => {
@@ -103,7 +106,7 @@ test('should take into account symlink to file', async t => {
 
     const files = await parseFiles(resdir);
 
-    t.deepEqual(files, [{ path: 'symlink.txt', contents: null, linkpath: '../file-1.txt' }]);
+    t.deepEqual(files, [{ path: 'symlink.txt', mode: 0o644, contents: null, linkpath: '../file-1.txt' }]);
 });
 
 test('should take into account symlink to dir if emptyDirs is true', async t => {
@@ -122,7 +125,7 @@ test('should take into account symlink to dir if emptyDirs is true', async t => 
 
     const files = await parseFiles(resdir);
 
-    t.deepEqual(files, [{ path: 'symdir', contents: null, linkpath: '../dir' }]);
+    t.deepEqual(files, [{ path: 'symdir', mode: 0o644, contents: null, linkpath: '../dir' }]);
 });
 
 test('should take into account symlink to dir if emptyDirs is false', async t => {
@@ -141,7 +144,7 @@ test('should take into account symlink to dir if emptyDirs is false', async t =>
 
     const files = await parseFiles(resdir);
 
-    t.deepEqual(files, [{ path: 'symdir', contents: null, linkpath: '../dir' }]);
+    t.deepEqual(files, [{ path: 'symdir', mode: 0o644, contents: null, linkpath: '../dir' }]);
 });
 
 test('should take into broken symlinks', async t => {
@@ -158,7 +161,7 @@ test('should take into broken symlinks', async t => {
 
     const files = await parseFiles();
 
-    t.deepEqual(files, [{ path: 'symlink.txt', contents: null, linkpath: '../no-file' }]);
+    t.deepEqual(files, [{ path: 'symlink.txt', mode: 0o644, contents: null, linkpath: '../no-file' }]);
 });
 
 test('should follow symlink', async t => {
@@ -175,7 +178,7 @@ test('should follow symlink', async t => {
 
     const files = await parseFiles(resdir);
 
-    t.deepEqual(files, [{ path: 'symlink.txt', contents: 'Hi!' }]);
+    t.deepEqual(files, [{ path: 'symlink.txt', mode: 0o644, contents: 'Hi!' }]);
 });
 
 test('should include empty file', async t => {
@@ -191,6 +194,22 @@ test('should include empty file', async t => {
     const files = await parseFiles();
 
     t.deepEqual(files.map(file => file.path), ['empty-file.txt', 'file-1.txt']);
+});
+
+unixOnly && test('should keep x flag in mode and skip the rest', async t => {
+    mockFs({
+        'source-dir': {
+            'bash': mockFs.file({ mode: 0o764 }),
+            'broodwar.exe': mockFs.file({ mode: 0o677 }),
+            'wth.sh': mockFs.file({ mode: 0o711 })
+        }
+    });
+
+    await packFiles(['bash', 'broodwar.exe', 'wth.sh']);
+
+    const files = await parseFiles();
+
+    t.deepEqual(files.map(file => file.mode), [0o744, 0o655, 0o755]);
 });
 
 test('should ignore empty file', async t => {
@@ -233,10 +252,10 @@ function parseFiles() {
         file: dest,
         onentry: entry => {
             if (entry.size === 0) {
-                files.push({ path: entry.path, contents: null, linkpath: entry.linkpath });
+                files.push({ path: entry.path, mode: entry.mode, contents: null, linkpath: entry.linkpath });
             } else {
                 entry.on('data', buf => {
-                    files.push({ path: entry.path, contents: buf.toString('utf-8') })
+                    files.push({ path: entry.path, mode: entry.mode, contents: buf.toString('utf-8') });
                 });
             }
         }
