@@ -5,6 +5,7 @@ const os = require('os');
 
 const test = require('ava');
 const mockFs = require('mock-fs');
+const Vinyl = require('vinyl');
 const streamify = require('stream-array');
 const tar = require('tar');
 
@@ -264,7 +265,7 @@ function parseFiles() {
 
 function findFiles(filenames) {
     const files = filenames.map(basename => {
-        return { path: path.join(root, basename), base: root, cwd: root };
+        return new Vinyl({ path: path.join(root, basename), base: root, cwd: root });
     });
 
     return streamify(files);
