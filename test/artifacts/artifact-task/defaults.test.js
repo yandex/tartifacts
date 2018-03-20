@@ -26,7 +26,8 @@ test('should create artifact with default options', t => {
         followSymlinks: false,
         dotFiles: true,
         emptyFiles: true,
-        emptyDirs: true
+        emptyDirs: true,
+        transformStreams: []
     });
 });
 

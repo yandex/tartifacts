@@ -59,6 +59,18 @@ test('should create task with empty dirs', t => {
     t.true(task.settings.emptyDirs);
 });
 
+test('should create task with transformStreams', t => {
+    const task = createTask({ transformStreams: ['stream'] });
+
+    t.deepEqual(task.settings.transformStreams, ['stream']);
+});
+
+test('should create task without transformStreams', t => {
+    const task = createTask();
+
+    t.is(task.settings.transformStreams.length, 0);
+});
+
 test('should create task without follow symlinks', t => {
     const task = createTask({ followSymlinks: false });
 

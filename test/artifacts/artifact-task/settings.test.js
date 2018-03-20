@@ -58,6 +58,12 @@ test('should create task with empty dirs', t => {
     t.true(task.settings.emptyDirs);
 });
 
+test('should create task with empty dirs', t => {
+    const task = new ArtifactTask(artifact, { transformStreams: ['stream'] });
+
+    t.deepEqual(task.settings.transformStreams, ['stream']);
+});
+
 test('should create task without follow symlinks', t => {
     const task = new ArtifactTask(artifact, { followSymlinks: false });
 
