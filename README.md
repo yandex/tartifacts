@@ -97,6 +97,7 @@ Each artifact object has the following fields:
 * [dotFiles](#artifactdotfiles)
 * [emptyFiles](#artifactemptyfiles)
 * [emptyDirs](#artifactemptydirs)
+* [transformStreams](#transformstreams)
 
 #### artifact.name
 
@@ -202,6 +203,18 @@ Default: `true`
 
 Include empty directories.
 
+#### artifact.transformStreams
+
+Type: `array<stream.Transform>`
+
+Default: `[]`
+
+Array of transform streams.
+
+It Allows you to use Transform streams to modify files before they are archived/copied. 
+
+Chunks in [Vinyl](https://github.com/gulpjs/vinyl) format but without content.
+
 ### options
 
 Type: `object`
@@ -218,6 +231,7 @@ The options specify general settings for all artifacts:
  * [dotFiles](#artifactdotfiles)
  * [emptyFiles](#artifactemptyfiles)
  * [emptyDirs](#artifactemptydirs)
+ * [transformStreams](#transformstreams)
 
 License
 -------
