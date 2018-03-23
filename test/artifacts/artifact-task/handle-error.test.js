@@ -49,3 +49,10 @@ test('should throw error if not archive with gzip', t => {
         'it is impossible to create not archive artifact with gzip. You should turn on the tar setting.'
     );
 });
+
+test('should throw error if transform has non-function type', t => {
+    t.throws(
+        () => new ArtifactTask({ dest: './dest-dir', patterns: ['lib/**'], transform: [() => { }, 'hello'] }),
+        'settings.transform must be a function.'
+    );
+});

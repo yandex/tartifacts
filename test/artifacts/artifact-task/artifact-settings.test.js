@@ -59,6 +59,20 @@ test('should create task with empty dirs', t => {
     t.true(task.settings.emptyDirs);
 });
 
+test('should create task with transform function', t => {
+    const func = () => { };
+
+    const task = createTask({ transform: func });
+
+    t.deepEqual(task.settings.transform, func);
+});
+
+test('should create task without transform function', t => {
+    const task = createTask();
+
+    t.is(task.settings.transform, null);
+});
+
 test('should create task without follow symlinks', t => {
     const task = createTask({ followSymlinks: false });
 
