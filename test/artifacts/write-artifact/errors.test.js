@@ -24,3 +24,18 @@ test('should throw error if include file does not exist', t => {
         /File not found/
     );
 });
+
+test('should handle error from transform function', t => {
+    mockFs({
+        'source-dir': {
+            'file.txt': 'hello!'
+        }
+    });
+
+    const brokenTransform = () => { throw new Error('some error') };
+
+    t.throws(
+        writeArtifact({ name: 'artifact-dir', patterns: 'source-dir/file.txt', transform: brokenTransform }),
+        /some error/
+    );
+});
