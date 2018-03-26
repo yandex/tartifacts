@@ -97,6 +97,7 @@ Each artifact object has the following fields:
 * [dotFiles](#artifactdotfiles)
 * [emptyFiles](#artifactemptyfiles)
 * [emptyDirs](#artifactemptydirs)
+* [transform](#transform)
 
 #### artifact.name
 
@@ -202,6 +203,20 @@ Default: `true`
 
 Include empty directories.
 
+#### artifact.transform
+
+Type: `Function`
+
+Default: `null`
+
+It allows you to modify files before they are archived/copied. 
+
+Transform function has one argument with type `{path: string, relative: string, base: string, cwd: string, history: string[]}` and should return the modified chunk or array of chunks.
+
+Note: now support only sync functions
+
+[Example](./examples/transform.js)
+
 ### options
 
 Type: `object`
@@ -218,6 +233,7 @@ The options specify general settings for all artifacts:
  * [dotFiles](#artifactdotfiles)
  * [emptyFiles](#artifactemptyfiles)
  * [emptyDirs](#artifactemptydirs)
+ * [transform](#transform)
 
 License
 -------

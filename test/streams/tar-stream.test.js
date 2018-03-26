@@ -264,7 +264,9 @@ function parseFiles() {
 
 function findFiles(filenames) {
     const files = filenames.map(basename => {
-        return { path: path.join(root, basename), base: root, cwd: root };
+        const filePath = path.join(root, basename);
+
+        return { path: filePath, base: root, cwd: root, history: [filePath] };
     });
 
     return streamify(files);
