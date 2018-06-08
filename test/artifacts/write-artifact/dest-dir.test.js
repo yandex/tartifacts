@@ -5,7 +5,7 @@ const fs = require('fs');
 const test = require('ava');
 const mockFs = require('mock-fs');
 
-const writeArtifact = require('../../../lib/artifacts').writeArtifact;
+const writeArtifacts = require('../../../lib');
 
 test.afterEach(() => mockFs.restore());
 
@@ -14,7 +14,7 @@ test('should create artifact in dest-dir', async t => {
         'source-dir': {}
     });
 
-    await writeArtifact({ destDir: 'dest-dir', name: 'artifact-dir', patterns: ['source-dir/'] });
+    await writeArtifacts({ destDir: 'dest-dir', name: 'artifact-dir', patterns: ['source-dir/'] });
 
     const stats = fs.statSync('dest-dir/artifact-dir');
 
@@ -26,7 +26,7 @@ test('should create artifact relative dest-dir', async t => {
         'source-dir': {}
     });
 
-    await writeArtifact({ destDir: 'dest-dir' , dest: '../artifact-dir', patterns: ['source-dir/'] });
+    await writeArtifacts({ destDir: 'dest-dir' , dest: '../artifact-dir', patterns: ['source-dir/'] });
 
     const files = fs.readdirSync('.');
 
@@ -38,7 +38,7 @@ test('should create artifact in root/dest-dir', async t => {
         '/root/source-dir': {}
     });
 
-    await writeArtifact({ root: '/root', destDir: 'dest-dir', name: 'artifact-dir', patterns: ['source-dir/'] });
+    await writeArtifacts({ root: '/root', destDir: 'dest-dir', name: 'artifact-dir', patterns: ['source-dir/'] });
 
     const stats = fs.statSync('/root/dest-dir/artifact-dir');
 
@@ -50,7 +50,7 @@ test('should create artifact relative dest-dir in root', async t => {
         '/root/source-dir': {}
     });
 
-    await writeArtifact({ root: '/root', destDir: 'dest-dir', dest: '../artifact-dir', patterns: ['source-dir/'] });
+    await writeArtifacts({ root: '/root', destDir: 'dest-dir', dest: '../artifact-dir', patterns: ['source-dir/'] });
 
     const stats = fs.statSync('/root/artifact-dir');
 
@@ -62,7 +62,7 @@ test('should create artifact in dest-dir by absolute path', async t => {
         '/root/source-dir': {}
     });
 
-    await writeArtifact({ root: '/root', destDir: '/dest-dir', name: 'artifact-dir', patterns: ['source-dir/'] });
+    await writeArtifacts({ root: '/root', destDir: '/dest-dir', name: 'artifact-dir', patterns: ['source-dir/'] });
 
     const stats = fs.statSync('/dest-dir/artifact-dir');
 
@@ -74,7 +74,7 @@ test('should create artifact by absolute dest path', async t => {
         '/root/source-dir': {}
     });
 
-    await writeArtifact({ root: '/root', destDir: '/dest-dir', dest: '/artifact-dir', patterns: ['source-dir/'] });
+    await writeArtifacts({ root: '/root', destDir: '/dest-dir', dest: '/artifact-dir', patterns: ['source-dir/'] });
 
     const stats = fs.statSync('/artifact-dir');
 

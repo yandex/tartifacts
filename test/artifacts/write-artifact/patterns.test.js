@@ -5,7 +5,7 @@ const fs = require('fs');
 const test = require('ava');
 const mockFs = require('mock-fs');
 
-const writeArtifact = require('../../../lib/artifacts').writeArtifact;
+const writeArtifacts = require('../../../lib');
 
 test.afterEach(() => mockFs.restore());
 
@@ -17,7 +17,7 @@ test('should include files', async t => {
         }
     });
 
-    await writeArtifact({ name: 'artifact-dir', patterns: ['source-dir/**'] });
+    await writeArtifacts({ name: 'artifact-dir', patterns: ['source-dir/**'] });
 
     const files = fs.readdirSync('artifact-dir/source-dir');
 
@@ -32,7 +32,7 @@ test('should exclude files', async t => {
         }
     });
 
-    await writeArtifact({ name: 'artifact-dir', patterns: ['source-dir/**', '!source-dir/file-2.txt'] });
+    await writeArtifacts({ name: 'artifact-dir', patterns: ['source-dir/**', '!source-dir/file-2.txt'] });
 
     const files = fs.readdirSync('artifact-dir/source-dir');
 
@@ -47,7 +47,7 @@ test('should override negative pattern', async t => {
         }
     });
 
-    await writeArtifact({
+    await writeArtifacts({
         name: 'artifact-dir',
         patterns: [
             'source-dir/**',
