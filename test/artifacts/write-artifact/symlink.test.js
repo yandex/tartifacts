@@ -6,7 +6,8 @@ const path = require('path');
 const test = require('ava');
 const mockFs = require('mock-fs');
 
-const writeArtifact = require('../../../lib/artifacts').writeArtifact;
+// const writeArtifacts = require('../../../lib/artifacts').writeArtifact;
+const writeArtifacts = require('../../../lib');
 
 test.afterEach(() => mockFs.restore());
 
@@ -20,7 +21,7 @@ test('should include symlink to file by default', async t => {
         }
     });
 
-    await writeArtifact({ name: 'artifact-dir', patterns: 'source-dir/**' });
+    await writeArtifacts({ name: 'artifact-dir', patterns: 'source-dir/**' });
 
     const link = fs.readlinkSync(path.join('artifact-dir', 'source-dir', 'symlink.txt'));
 
@@ -39,7 +40,7 @@ test('should include symlink to dir by default', async t => {
         }
     });
 
-    await writeArtifact({ name: 'artifact-dir', patterns: 'source-dir/**' });
+    await writeArtifacts({ name: 'artifact-dir', patterns: 'source-dir/**' });
 
     const link = fs.readlinkSync(path.join('artifact-dir', 'source-dir', 'symdir'));
 
@@ -56,7 +57,7 @@ test('should follow symlink to file', async t => {
         }
     });
 
-    await writeArtifact({ name: 'artifact-dir', patterns: 'source-dir/**' }, { followSymlinks: true });
+    await writeArtifacts({ name: 'artifact-dir', patterns: 'source-dir/**' }, { followSymlinks: true });
 
     const contents = fs.readFileSync(path.join('artifact-dir', 'source-dir', 'symlink.txt'), 'utf-8');
 
@@ -75,7 +76,7 @@ test('should follow symlink to dir', async t => {
         }
     });
 
-    await writeArtifact({ name: 'artifact-dir', patterns: 'source-dir/**' }, { followSymlinks: true });
+    await writeArtifacts({ name: 'artifact-dir', patterns: 'source-dir/**' }, { followSymlinks: true });
 
     const contents = fs.readFileSync(path.join('artifact-dir', 'source-dir', 'symdir', 'file.txt'), 'utf-8');
 

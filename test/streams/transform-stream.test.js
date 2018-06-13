@@ -6,7 +6,7 @@ const path = require('path');
 const test = require('ava');
 const mockFs = require('mock-fs');
 
-const writeArtifact = require('../../lib/artifacts').writeArtifact;
+const writeArtifact = require('../../lib');
 
 test.afterEach(() => mockFs.restore());
 

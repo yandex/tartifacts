@@ -62,12 +62,33 @@ writeArtifacts(artifacts, {
     root: './path/to/my-project/', // files of artifacts will be searched from root by artifact patterns,
                                    // for example: ./path/to/my-project/sources/**
     destDir: './dest/',
-    dotFiles: true,   // include dotfiles
-    emptyFiles: true  // include empty files
-    emptyDirs: true   // include empty directories
+    dotFiles: true,    // include dotfiles
+    emptyFiles: true,  // include empty files
+    emptyDirs: true    // include empty directories
 })
 .then(() => console.log('Copying and packaging of artifacts completed!'))
 .catch(console.error);
+```
+
+or advanced one which is especially useful for `watch` mode
+
+```js
+const Tartifacts = require('tartifacts').Tartifacts;
+const tartifacts = new Tartifacts({
+    watch: true // files and directories will be added to the destination artifact
+                // in runtime as soon as they appear on the file system
+});
+
+process.on('SIGTERM', () => tartifacts.closeArtifacts());
+
+tartifacts.writeArtifacts({
+    name: 'artifact.tar.gz',
+    patterns: ['sources/**']
+})
+.then(() => {
+    // will be resolved only after "tartifacts.closeArtifacts()"" call on "SIGTERM" event
+    // and all artifacts are ready
+})
 ```
 
 API
@@ -75,7 +96,19 @@ API
 
 ### writeArtifacts(artifacts, [options])
 
-Search files of artifact by glob patterns and writes them to artifact in fs.
+Searchs files of artifact by glob patterns and writes them to artifact in fs.
+
+### Tartifacts([options])
+
+Constructor which creates an instance of Tartifacts with the methods described below.
+
+#### Tartifacts.prototype.writeArtifacts(artifacts)
+
+Does the same as function `writeArtifacts`.
+
+#### Tartifacts.prototype.closeArtifacts
+
+Method which is useful when artifacts are created in `watch` mode and should be called in order to resolve `Tartifacts.prototype.writeArtifacts` (see the [usage](#usage) above).
 
 ### artifacts
 
@@ -98,6 +131,7 @@ Each artifact object has the following fields:
 * [emptyFiles](#artifactemptyfiles)
 * [emptyDirs](#artifactemptydirs)
 * [transform](#transform)
+* [watch](#artifactwatch)
 
 #### artifact.name
 
@@ -209,13 +243,23 @@ Type: `Function`
 
 Default: `null`
 
-It allows you to modify files before they are archived/copied. 
+It allows you to modify files before they are archived/copied.
 
 Transform function has one argument with type `{path: string, relative: string, base: string, cwd: string, history: string[]}` and should return the modified chunk or array of chunks.
 
 Note: now support only sync functions
 
 [Example](./examples/transform.js)
+
+### artifact.watch
+
+Type: `boolean`
+
+Default: `false`
+
+Tartifacts will work in an observe mode which means that all files and directories will be added to a destination directory or archive as soon as they appear on a file system.
+
+Note: it is recommended to use this mode with the advanced API which is described in the [usage](#usage) above in order to have the ability to stop the tool
 
 ### options
 
@@ -234,6 +278,7 @@ The options specify general settings for all artifacts:
  * [emptyFiles](#artifactemptyfiles)
  * [emptyDirs](#artifactemptydirs)
  * [transform](#transform)
+ * [watch](#artifactwatch)
 
 License
 -------

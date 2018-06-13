@@ -7,11 +7,11 @@ const mockFs = require('mock-fs');
 const isTar = require('is-tar');
 const isGzip = require('is-gzip');
 
-const writeArtifact = require('../../../lib/artifacts').writeArtifact;
+const writeArtifacts = require('../../../lib');
 
 test.afterEach(() => mockFs.restore());
 
-test('should pack to tarball', async t => {
+test('should pack to tarball',  async t => {
     mockFs({
         'source-dir': {
             'file-1.txt': 'Hi!',
@@ -19,7 +19,7 @@ test('should pack to tarball', async t => {
         }
     });
 
-    await writeArtifact({ name: 'artifact.tar', patterns: 'source-dir/**' }, { tar: true });
+    await writeArtifacts({ name: 'artifact.tar', patterns: 'source-dir/**' }, { tar: true });
 
     const archive = fs.readFileSync('artifact.tar');
 
@@ -34,7 +34,7 @@ test('should pack to tarball with gzip', async t => {
         }
     });
 
-    await writeArtifact({ name: 'artifact.tar.gz', patterns: 'source-dir/**'}, { tar: true, gzip: true });
+    await writeArtifacts({ name: 'artifact.tar.gz', patterns: 'source-dir/**'}, { tar: true, gzip: true });
 
     const archive = fs.readFileSync('artifact.tar.gz');
 
@@ -49,7 +49,7 @@ test('should pack to tarball with gzip using gzip options', async t => {
         }
     });
 
-    await writeArtifact({ name: 'artifact.tar.gz', patterns: 'source-dir/**' }, { tar: true, gzip: { level: 1 } });
+    await writeArtifacts({ name: 'artifact.tar.gz', patterns: 'source-dir/**' }, { tar: true, gzip: { level: 1 } });
 
     const gz = fs.readFileSync('artifact.tar.gz');
 
