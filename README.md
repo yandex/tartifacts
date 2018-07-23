@@ -75,8 +75,7 @@ or advanced one which is especially useful for `watch` mode
 ```js
 const Tartifacts = require('tartifacts').Tartifacts;
 const tartifacts = new Tartifacts({
-    watch: true // files and directories will be added to the destination artifact
-                // in runtime as soon as they appear on the file system
+    watch: true
 });
 
 process.on('SIGTERM', () => tartifacts.closeArtifacts());
@@ -86,7 +85,7 @@ tartifacts.writeArtifacts({
     patterns: ['sources/**']
 })
 .then(() => {
-    // will be resolved only after "tartifacts.closeArtifacts()"" call on "SIGTERM" event
+    // will be resolved only after "tartifacts.closeArtifacts()" call on "SIGTERM" event
     // and all artifacts are ready
 })
 ```
@@ -108,7 +107,7 @@ Does the same as function `writeArtifacts`.
 
 #### Tartifacts.prototype.closeArtifacts
 
-Method which is useful when artifacts are created in `watch` mode and should be called in order to resolve `Tartifacts.prototype.writeArtifacts` (see the [usage](#usage) above).
+Method which is useful when artifacts are created in `watch` mode and should be called in order to resolve [Tartifacts.prototype.writeArtifacts](#tartifactsprototypewriteartifactsartifacts) (see the [usage](#usage) above).
 
 ### artifacts
 
@@ -251,13 +250,21 @@ Note: now support only sync functions
 
 [Example](./examples/transform.js)
 
-### artifact.watch
+#### artifact.watch
 
-Type: `boolean`
+Type: `boolean`, `object`
 
 Default: `false`
 
-Tartifacts will work in an observe mode which means that all files and directories will be added to a destination directory or archive as soon as they appear on a file system.
+Tartifacts will work in `watch` mode which means that when tartifacts add all files and directories to a destination directory or archive it will not be resolved until [Tartifacts.prototype.closeArtifacts](#tartifactsprototypecloseartifacts) will be called. When this method is called tartifacts will add all files and directories which are created or modified on a file system after `startTime` which equals to `Date.now()` (start time of artifact creation) and [Tartifacts.prototype.writeArtifacts](#tartifactsprototypewriteartifacts) will be resolved. There is an ability to customize `startTime` using object notation of option `watch`:
+
+```js
+{
+    watch: {
+        startTime: Date.now()
+    }
+}
+```
 
 Note: it is recommended to use this mode with the advanced API which is described in the [usage](#usage) above in order to have the ability to stop the tool
 
