@@ -224,7 +224,7 @@ function findFiles(filenames) {
     const files = filenames.map(basename => {
         const filePath = path.join(root, basename);
 
-        return { path: filePath, base: root, cwd: root, history: [filePath] };
+        return { path: filePath, base: root, cwd: root, history: [filePath], lstats: fs.lstatSync(filePath) };
     });
 
     return streamify(files);
