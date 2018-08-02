@@ -33,7 +33,7 @@ test('should not throw error if includes is specified instead of patterns', t =>
 test('should throw error if patterns have errors', t => {
     t.throws(
         () => config.format({ dest: './dest-dir', patterns: ['!exlib/**'] }),
-        'the first pattern of artifact should not be is negative.'
+        'the first pattern of artifact should not be negative.'
     );
 });
 

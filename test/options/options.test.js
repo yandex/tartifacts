@@ -72,7 +72,7 @@ test('should build path by absolute dest and dest dir', t => {
 test('should build patterns', t => {
     const options = formatOptions({ name: 'tartifact', patterns: 'lib/**', includes: ['test/**'], excludes: ['exlib/**'] });
 
-    t.deepEqual(options.patterns, ['lib/**', 'test/**', '!exlib/**']);
+    t.deepEqual(options.patterns, { '.': ['lib/**', 'test/**', '!exlib/**'] });
 });
 
 test('should format options with falsey "tar" option', t => {

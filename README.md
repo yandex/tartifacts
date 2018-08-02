@@ -159,7 +159,7 @@ The `dest` and `name` will be resolved from `destDir`. If `destDir` is not speci
 
 #### artifact.patterns
 
-Type: `string`, `string[]`
+Type: `string`, `string[]`, `object`
 
 Default: `[]`
 
@@ -182,6 +182,20 @@ Type: `string`, `string[]`
 Default: `[]`
 
 The paths to files which need to be excluded.
+
+Can be specifed as an object:
+
+```js
+{
+    name: 'artifact',
+    patterns: {
+        './subdir1': ['dir1/**'],
+        './subdir2': ['dir2/**']
+    }
+}
+```
+
+This means that all files which match `dir1/**` will be added to directory `artifact/subdir1` and all files which match `dir2/**` will be added to directory `artifact/subdir2`, so, for example, file `./dir1/file.ext` will be added to artifact as `./artifact/subdir1/dir1/file.ext` and file, for `./dir2/file.ext` will be added to artifact as `./artifact/subdir2/dir2/file.ext`.
 
 #### artifact.tar
 

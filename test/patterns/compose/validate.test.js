@@ -28,13 +28,13 @@ test('should throw error if includes has negative patterns', t => {
 test('should throw error if patterns param is negative patterns', t => {
     t.throws(
         () => composePatterns('!source-dir/**'),
-        'the first pattern of artifact should not be is negative.'
+        'the first pattern of artifact should not be negative.'
     );
 });
 
 test('should throw error if first pattern is negative glob', t => {
     t.throws(
         () => composePatterns(['!source-dir/**', 'source-dir/file-1.txt']),
-        'the first pattern of artifact should not be is negative.'
+        'the first pattern of artifact should not be negative.'
     );
 });
